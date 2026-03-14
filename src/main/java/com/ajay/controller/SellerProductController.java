@@ -1,0 +1,82 @@
+package com.ajay.controller;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import com.ajay.exception.CategoryNotFoundException;
+import com.ajay.exception.ProductException;
+import com.ajay.exception.SellerException;
+import com.ajay.exception.UserException;
+import com.ajay.model.Product;
+import com.ajay.model.Seller;
+import com.ajay.request.CreateProductRequest;
+import com.ajay.service.ProductService;
+import com.ajay.service.SellerService;
+import com.ajay.service.UserService;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/sellers/product")
+@RequiredArgsConstructor
+public class SellerProductController {
+
+    private final ProductService productService;
+    private final SellerService sellerService;
+    private final UserService userService;
+
+    @GetMapping
+    public ResponseEntity<List<Product>> getProductBySellerId(
+            @RequestHeader("Authorization") String jwt) throws ProductException, SellerException {
+        Seller seller = sellerService.getSellerProfile(jwt);
+        List<Product> products = productService.getProductBySellerId(seller.getId());
+        return new ResponseEntity<>(products, HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<Product> createProduct(
+            @RequestBody CreateProductRequest request,
+            @RequestHeader("Authorization") String jwt)
+            throws UserException, ProductException, CategoryNotFoundException, SellerException {
+        Seller seller = sellerService.getSellerProfile(jwt);
+        Product product = productService.createProduct(request, seller);
+        return new ResponseEntity<>(product, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long productId) {
+        try {
+            productService.deleteProduct(productId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (ProductException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    // The incoming Product object is treated as a plain data carrier.
+    // ProductServiceImpl.updateProduct() loads the existing managed entity
+    // from DB and copies only the safe fields — so detached-entity issues
+    // and accidental nulling of seller/category are handled in the service.
+    @PatchMapping("/{productId}")
+    public ResponseEntity<Product> updateProduct(
+            @PathVariable Long productId,
+            @RequestBody Product product) {
+        try {
+            Product updatedProduct = productService.updateProduct(productId, product);
+            return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
+        } catch (ProductException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PatchMapping("/{productId}/stock")
+    public ResponseEntity<Product> updateProductStock(@PathVariable Long productId) {
+        try {
+            Product updatedProduct = productService.updateProductStock(productId);
+            return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
+        } catch (ProductException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+}

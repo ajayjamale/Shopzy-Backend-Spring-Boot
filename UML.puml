@@ -1,0 +1,1318 @@
+@startuml
+class com.ajay.mapper.UserMapper {
++ {static} UserDto toUserDto(User)
+}
+
+interface com.ajay.service.SellerService {
+~ Seller getSellerProfile(String)
+~ Seller createSeller(Seller)
+~ Seller getSellerById(Long)
+~ Seller getSellerByEmail(String)
+~ List<Seller> getAllSellers(AccountStatus)
+~ Seller updateSeller(Long,Seller)
+~ void deleteSeller(Long)
+~ Seller verifyEmail(String,String)
+~ Seller updateSellerAccountStatus(Long,AccountStatus)
+}
+
+class com.ajay.service.impl.ReviewServiceImpl {
+- ReviewRepository reviewRepository
++ Review createReview(CreateReviewRequest,User,Product)
++ List<Review> getReviewsByProductId(Long)
++ Review updateReview(Long,String,double,Long)
++ void deleteReview(Long,Long)
+}
+
+
+interface com.ajay.service.CartService {
++ CartItem addCartItem(User,Product,String,int)
++ Cart findUserCart(User)
+}
+
+interface com.ajay.repository.CouponRepository {
+~ Coupon findByCode(String)
+}
+
+class com.ajay.service.impl.PaymentServiceImpl {
+- String apiKey
+- String apiSecret
+- PaymentOrderRepository paymentOrderRepository
+- OrderRepository orderRepository
+- CartRepository cartRepository
++ PaymentOrder createOrder(User,Set<Order>)
++ PaymentOrder getPaymentOrderById(Long)
++ PaymentOrder getPaymentOrderByPaymentId(String)
++ Boolean ProceedPaymentOrder(PaymentOrder,String,String)
++ PaymentLink createRazorpayPaymentLink(User,Long,Long)
+}
+
+
+class com.ajay.exception.ProductException {
+}
+class com.ajay.service.impl.AuthServiceImpl {
+- UserService userService
+- VerificationCodeRepository verificationCodeRepository
+- EmailService emailService
+- PasswordEncoder passwordEncoder
+- UserRepository userRepository
+- JwtProvider jwtProvider
+- CustomeUserServiceImplementation customUserDetails
+- CartRepository cartRepository
++ void sentLoginOtp(String)
++ String createUser(SignupRequest)
++ AuthResponse signin(LoginRequest)
+- Authentication authenticate(String,String)
+}
+
+
+interface com.ajay.repository.DealRepository {
+}
+class com.ajay.ai.controllers.AiChatBotController {
+- AiChatBotService aiChatBotService
+- UserService userService
++ ResponseEntity<ApiResponse> generate(Prompt,Long,Long,String)
+}
+
+
+class com.ajay.exception.UserException {
+}
+class com.ajay.config.JwtProvider {
+- SecretKey key
++ String generateToken(Authentication)
++ String getEmailFromJwtToken(String)
++ String populateAuthorities(Collection<? extends GrantedAuthority>)
+}
+
+
+class com.ajay.response.FunctionResponse {
+- String functionName
+- Cart userCart
+- OrderHistory orderHistory
+- Product product
+}
+
+class com.ajay.controller.ReviewController {
+- ReviewService reviewService
+- UserService userService
+- ProductService productService
++ ResponseEntity<List<Review>> getReviewsByProductId(Long)
++ ResponseEntity<Review> writeReview(CreateReviewRequest,Long,String)
++ ResponseEntity<Review> updateReview(CreateReviewRequest,Long,String)
++ ResponseEntity<ApiResponse> deleteReview(Long,String)
+}
+
+
+class com.ajay.config.JwtConstant {
++ {static} String SECRET_KEY
++ {static} String JWT_HEADER
+}
+
+class com.ajay.exception.CartItemException {
+}
+class com.ajay.request.CreateReviewRequest {
+- String reviewText
+- double reviewRating
+- List<String> productImages
+}
+
+class com.ajay.service.impl.CartServiceImplementation {
+- CartRepository cartRepository
+- CartItemRepository cartItemRepository
+- ProductService productService
++ Cart findUserCart(User)
++ {static} int calculateDiscountPercentage(double,double)
++ CartItem addCartItem(User,Product,String,int)
+}
+
+
+class com.ajay.model.SellerReport {
+- Long id
+- Seller seller
+- Long totalEarnings
+- Long totalSales
+- Long totalRefunds
+- Long totalTax
+- Long netEarnings
+- Integer totalOrders
+- Integer canceledOrders
+- Integer totalTransactions
+}
+
+class com.ajay.controller.DealController {
+- DealService dealService
++ ResponseEntity<Deal> createDeals(Deal)
++ ResponseEntity<List<Deal>> getDeals()
++ ResponseEntity<Deal> updateDeal(Long,Deal)
++ ResponseEntity<ApiResponse> deleteDeals(Long)
+}
+
+
+class com.ajay.model.BusinessDetails {
+- String businessName
+- String businessEmail
+- String businessMobile
+- String businessAddress
+- String logo
+- String banner
+}
+
+interface com.ajay.service.AuthService {
+~ void sentLoginOtp(String)
+~ String createUser(SignupRequest)
+~ AuthResponse signin(LoginRequest)
+}
+
+class com.ajay.request.SignupRequest {
+- String mobile
+- String fullName
+- String email
+- String otp
+}
+
+interface com.ajay.service.HomeCategoryService {
+~ HomeCategory createCategory(HomeCategory)
+~ List<HomeCategory> createCategories(List<HomeCategory>)
+~ List<HomeCategory> getAllCategories()
+~ HomeCategory updateCategory(HomeCategory,Long)
+}
+
+interface com.ajay.repository.CartRepository {
+~ Cart findByUserId(Long)
+}
+
+interface com.ajay.service.DealService {
+~ Deal createDeal(Deal)
+~ List<Deal> getDeals()
+~ Deal updateDeal(Deal,Long)
+~ void deleteDeal(Long)
+}
+
+class com.ajay.utils.OtpUtils {
++ {static} String generateOTP()
+}
+
+class com.ajay.response.ApiResponse {
+- String message
+- boolean status
+}
+
+class com.ajay.dto.UserDto {
+- Long id
+- String fullName
+- String email
+- String profilePicture
+}
+
+class com.ajay.model.OrderItem {
+- Long id
+- Order order
+- Product product
+- String size
+- int quantity
+- Integer mrpPrice
+- Integer sellingPrice
+- Long userId
+}
+
+class com.ajay.request.ResetPasswordRequest {
+- String password
+- String token
+}
+
+class com.ajay.service.impl.CouponServiceImpl {
+- CouponRepository couponRepository
+- UserRepository userRepository
+- CartRepository cartRepository
++ Cart applyCoupon(String,double,User)
++ Cart removeCoupon(String,User)
++ Coupon createCoupon(Coupon)
++ void deleteCoupon(Long)
++ List<Coupon> getAllCoupons()
++ Coupon getCouponById(Long)
+}
+
+
+class com.ajay.config.JwtTokenValidator {
+# void doFilterInternal(HttpServletRequest,HttpServletResponse,FilterChain)
+}
+
+class com.ajay.exception.OrderException {
+}
+class com.ajay.controller.CartController {
+- CartService cartService
+- UserService userService
+- ProductService productService
+- CartItemService cartItemService
++ ResponseEntity<Cart> findUserCartHandler(String)
++ ResponseEntity<CartItem> addItemToCart(AddItemRequest,String)
++ ResponseEntity<ApiResponse> deleteCartItemHandler(Long,String)
++ ResponseEntity<CartItem> updateCartItemHandler(Long,CartItem,String)
+}
+
+
+class com.ajay.exception.CategoryNotFoundException {
+}
+interface com.ajay.repository.PayoutsRepository {
+~ List<Payouts> findPayoutsBySellerId(Long)
+~ List<Payouts> findAllByStatus(PayoutsStatus)
+}
+
+class com.ajay.controller.SellerProductController {
+- ProductService productService
+- SellerService sellerService
+- UserService userService
++ ResponseEntity<List<Product>> getProductBySellerId(String)
++ ResponseEntity<Product> createProduct(CreateProductRequest,String)
++ ResponseEntity<Void> deleteProduct(Long)
++ ResponseEntity<Product> updateProduct(Long,Product)
++ ResponseEntity<Product> updateProductStock(Long)
+}
+
+
+class com.ajay.controller.RevenueController {
+- RevenueService revenueService
+- SellerService sellerService
++ ResponseEntity<List<RevenueChart>> getRevenueChart(String,String)
+}
+
+
+class com.ajay.model.User {
+- Long id
+- String password
+- String email
+- String fullName
+- String mobile
+- USER_ROLE role
+- Set<Address> addresses
+- Set<Coupon> usedCoupons
+}
+
+interface com.ajay.repository.CartItemRepository {
+~ CartItem findByCartAndProductAndSize(Cart,Product,String)
+}
+
+interface com.ajay.service.TransactionService {
+~ Transaction createTransaction(Order)
+~ List<Transaction> getTransactionBySeller(Seller)
+~ List<Transaction> getAllTransactions()
+}
+
+interface com.ajay.repository.SellerRepository {
+~ Seller findByEmail(String)
+~ List<Seller> findByAccountStatus(AccountStatus)
+}
+
+interface com.ajay.service.PaymentService {
+~ PaymentOrder createOrder(User,Set<Order>)
+~ PaymentOrder getPaymentOrderById(Long)
+~ PaymentOrder getPaymentOrderByPaymentId(String)
+~ Boolean ProceedPaymentOrder(PaymentOrder,String,String)
+~ PaymentLink createRazorpayPaymentLink(User,Long,Long)
+}
+
+enum com.ajay.domain.OrderStatus {
++  PENDING
++  PLACED
++  CONFIRMED
++  SHIPPED
++  DELIVERED
++  CANCELLED
+}
+
+class com.ajay.service.impl.OrderItemServiceImpl {
+- OrderItemRepository orderItemRepository
++ OrderItem getOrderItemById(Long)
+}
+
+
+class com.ajay.ai.services.AiProductServiceImpl {
+- {static} String API_KEY
++ String simpleChat(String)
+}
+
+
+interface com.ajay.service.OrderItemService {
+~ OrderItem getOrderItemById(Long)
+}
+
+interface com.ajay.repository.VerificationCodeRepository {
+~ VerificationCode findByEmail(String)
+~ VerificationCode findByOtp(String)
+}
+
+interface com.ajay.service.WishlistService {
+~ Wishlist createWishlist(User)
+~ Wishlist getWishlistByUserId(User)
+~ Wishlist addProductToWishlist(User,Product)
+}
+
+class com.ajay.request.CreateCategoryRequest {
+- String parentCategoryId
+- int level
+- String name
+- String categoryId
+}
+
+class com.ajay.controller.PaymentController {
+- UserService userService
+- PaymentService paymentService
+- TransactionService transactionService
+- SellerReportService sellerReportService
+- SellerService sellerService
+- CartRepository cartRepository
+- CartItemRepository cartItemRepository
++ ResponseEntity<PaymentLinkResponse> paymentHandler(PaymentMethod,Long,String)
++ ResponseEntity<ApiResponse> paymentSuccessHandler(String,String,String)
+}
+
+
+class com.ajay.exception.SellerException {
+}
+class com.ajay.exception.WishlistNotFoundException {
+}
+class com.ajay.service.impl.SellerReportServiceImpl {
+- SellerReportRepository sellerReportRepository
++ SellerReport getSellerReport(Seller)
++ SellerReport updateSellerReport(SellerReport)
+}
+
+
+class com.ajay.dto.ProductDto {
+- Long id
+- String title
+- String description
+- int mrpPrice
+- int sellingPrice
+- int discountPercent
+- int quantity
+- String color
+- List<String> images
+- int numRatings
+- LocalDateTime createdAt
+- String Sizes
+}
+
+class com.ajay.controller.AdminController {
+- SellerService sellerService
+- HomeCategoryService homeCategoryService
++ ResponseEntity<Seller> updateSellerStatus(Long,AccountStatus)
++ ResponseEntity<List<HomeCategory>> getHomeCategory()
++ ResponseEntity<HomeCategory> updateHomeCategory(Long,HomeCategory)
+}
+
+
+class com.ajay.controller.AdminCouponController {
+- CouponService couponService
+- UserService userService
+- CartService cartService
++ ResponseEntity<Cart> applyCoupon(String,String,double,String)
++ ResponseEntity<Coupon> createCoupon(Coupon)
++ ResponseEntity<?> deleteCoupon(Long)
++ ResponseEntity<List<Coupon>> getAllCoupons()
+}
+
+
+class com.ajay.request.AddItemRequest {
+- Long productId
+- String size
+- int quantity
+- Integer price
+}
+
+class com.ajay.service.impl.HomeServiceImpl {
+- DealRepository dealRepository
++ Home creatHomePageData(List<HomeCategory>)
+}
+
+
+class com.ajay.service.impl.SellerServiceImpl {
+- SellerRepository sellerRepository
+- AddressRepository addressRepository
+- PasswordEncoder passwordEncoder
+- JwtProvider jwtProvider
++ Seller getSellerProfile(String)
++ Seller createSeller(Seller)
++ Seller getSellerById(Long)
++ Seller getSellerByEmail(String)
++ List<Seller> getAllSellers(AccountStatus)
++ Seller updateSeller(Long,Seller)
++ void deleteSeller(Long)
++ Seller verifyEmail(String,String)
++ Seller updateSellerAccountStatus(Long,AccountStatus)
+}
+
+
+class com.ajay.exception.ShopNotFoundException {
+}
+class com.ajay.controller.HomeController {
+- HomeService homeService
++ ResponseEntity<ApiResponse> home()
+}
+
+
+class com.ajay.model.Category {
+- Long id
+- String name
+- String categoryId
+- Category parentCategory
+- Integer level
+}
+
+class com.ajay.model.Deal {
+- Long id
+- Integer discount
+- HomeCategory category
+}
+
+class com.ajay.request.CreateProductRequest {
+- String title
+- String description
+- int mrpPrice
+- int sellingPrice
+- String brand
+- String color
+- List<String> images
+- String category
+- String category2
+- String category3
+- String sizes
+}
+
+class com.ajay.model.VerificationCode {
+- Long id
+- String otp
+- String email
+- User user
+- Seller seller
+}
+
+interface com.ajay.repository.HomeCategoryRepository {
+}
+interface com.ajay.repository.ProductRepository {
+~ List<Product> findBySellerId(Long)
+~ List<Product> searchProduct(String)
+}
+
+class com.ajay.service.EmailService {
+- JavaMailSender javaMailSender
++ void sendVerificationOtpEmail(String,String,String,String)
+}
+
+
+class com.ajay.model.Coupon {
+- Long id
+- String code
+- double discountPercentage
+- LocalDate validityStartDate
+- LocalDate validityEndDate
+- double minimumOrderValue
+- boolean isActive
+- Set<User> usedByUsers
+}
+
+interface com.ajay.ai.services.AiChatBotService {
+~ ApiResponse aiChatBot(String,Long,Long)
+}
+
+enum com.ajay.domain.AccountStatus {
++  PENDING_VERIFICATION
++  ACTIVE
++  SUSPENDED
++  DEACTIVATED
++  BANNED
++  CLOSED
+}
+
+class com.ajay.request.LoginRequest {
+- String email
+- String password
+- String otp
+}
+
+enum com.ajay.domain.PaymentMethod {
++  RAZORPAY
++  STRIPE
+}
+
+class com.ajay.service.impl.UserServiceImplementation {
+- UserRepository userRepository
+- JwtProvider jwtProvider
+- PasswordEncoder passwordEncoder
+- PasswordResetTokenRepository passwordResetTokenRepository
+- JavaMailSender javaMailSender
++ User findUserProfileByJwt(String)
++ User findUserByEmail(String)
+}
+
+
+interface com.ajay.repository.WishlistRepository {
+~ Wishlist findByUserId(Long)
+}
+
+class com.ajay.dto.OrderHistory {
+- Long id
+- UserDto user
+- List<OrderDto> currentOrders
+- int totalOrders
+- int cancelledOrders
+- int completedOrders
+- int pendingOrders
+}
+
+class com.ajay.controller.SellerOrderController {
+- OrderService orderService
+- SellerService sellerService
++ ResponseEntity<List<Order>> getAllOrdersHandler(String)
++ ResponseEntity<Order> updateOrderHandler(String,Long,OrderStatus)
++ ResponseEntity<ApiResponse> deleteOrderHandler(Long,String)
+}
+
+
+class com.ajay.config.AppConfig {
+~ SecurityFilterChain securityFilterChain(HttpSecurity)
+- CorsConfigurationSource corsConfigurationSource()
+~ PasswordEncoder passwordEncoder()
++ RestTemplate restTemplate()
+}
+
+class com.ajay.model.BankDetails {
+- String accountNumber
+- String accountHolderName
+- String ifscCode
+}
+
+class com.ajay.service.impl.DealServiceImpl {
+- DealRepository dealRepository
+- HomeCategoryRepository homeCategoryRepository
++ Deal createDeal(Deal)
++ List<Deal> getDeals()
++ Deal updateDeal(Deal,Long)
++ void deleteDeal(Long)
+}
+
+
+class com.ajay.model.PaymentInformation {
+- String cardholderName
+- String cardNumber
+- LocalDate expirationDate
+- String cvv
+}
+
+class com.ajay.request.CreateHomeCategories {
+- String categoryId
+- String name
+- String image
+}
+
+class com.ajay.model.Transaction {
+- Long id
+- User customer
+- Order order
+- Seller seller
+- LocalDateTime date
+}
+
+class com.ajay.request.DeleteProductRequest {
+}
+class com.ajay.model.Payouts {
+- Long id
+- List<Transaction> transactions
+- Seller seller
+- Long amount
+- PayoutsStatus status
+- LocalDateTime data
+}
+
+class com.ajay.controller.ProductController {
+- ProductService productService
+- UserService userService
+- SellerService sellerService
++ ResponseEntity<Product> getProductById(Long)
++ ResponseEntity<List<Product>> searchProduct(String)
++ ResponseEntity<Page<Product>> getAllProducts(String,String,String,String,Integer,Integer,Integer,String,String,Integer)
+}
+
+
+interface com.ajay.ai.services.AiProductService {
+~ String simpleChat(String)
+}
+
+class com.ajay.model.PaymentDetails {
+- String paymentId
+- String razorpayPaymentLinkId
+- String razorpayPaymentLinkReferenceId
+- String razorpayPaymentLinkStatus
+- String razorpayPaymentId​
+- PaymentStatus status
+}
+
+class com.ajay.controller.CustomerController {
+- HomeCategoryService homeCategoryService
+- HomeService homeService
++ ResponseEntity<Home> getHomePageData()
++ ResponseEntity<Home> createHomeCategories(List<HomeCategory>)
+}
+
+
+class com.ajay.ai.services.ProductDetailsBotServiceImpl {
++ String productDetailsChatBot(String)
+}
+
+class com.ajay.utils.AdminInitializationComponent {
+- UserRepository userRepository
+- PasswordEncoder passwordEncoder
++ void run(String)
+- void initializeAdminUser()
+}
+
+
+class com.ajay.mapper.OrderMapper {
++ {static} OrderItemDto toOrderItemDto(OrderItem)
++ {static} OrderItem toOrderItem(OrderItemDto)
++ {static} OrderDto toOrderDto(Order)
++ {static} Order toOrder(OrderDto)
++ {static} OrderHistory toOrderHistory(List<Order>,User)
+}
+
+class com.ajay.model.PasswordResetToken {
+- Integer id
+- String token
+- User user
+- Date expiryDate
++ boolean isExpired()
+}
+
+
+class com.ajay.service.impl.VerificationServiceImpl {
+- VerificationCodeRepository verificationCodeRepository
++ VerificationCode createVerificationCode(String,String)
+}
+
+
+class com.ajay.model.Cart {
+- Long id
+- User user
+- Set<CartItem> cartItems
+- double totalSellingPrice
+- int totalItem
+- int totalMrpPrice
+- int discount
+- String couponCode
+- int couponPrice
+}
+
+interface com.ajay.service.CouponService {
+~ Cart applyCoupon(String,double,User)
+~ Cart removeCoupon(String,User)
+~ Coupon createCoupon(Coupon)
+~ void deleteCoupon(Long)
+~ List<Coupon> getAllCoupons()
+~ Coupon getCouponById(Long)
+}
+
+class com.ajay.service.impl.OrderServiceImplementation {
+- OrderRepository orderRepository
+- CartService cartService
+- AddressRepository addressRepository
+- UserRepository userRepository
+- OrderItemService orderItemService
+- OrderItemRepository orderItemRepository
++ Set<Order> createOrder(User,Address,Cart)
++ Order findOrderById(Long)
++ List<Order> usersOrderHistory(Long)
++ List<Order> getShopsOrders(Long)
++ Order updateOrderStatus(Long,OrderStatus)
++ void deleteOrder(Long)
++ Order cancelOrder(Long,User)
+}
+
+
+class com.ajay.controller.WishlistController {
+- WishlistService wishlistService
+- ProductService productService
+- UserService userService
++ ResponseEntity<Wishlist> createWishlist(User)
++ ResponseEntity<Wishlist> getWishlistByUserId(String)
++ ResponseEntity<Wishlist> addProductToWishlist(Long,String)
+}
+
+
+class com.ajay.model.Product {
+- Long id
+- String title
+- String description
+- int mrpPrice
+- int sellingPrice
+- int discountPercent
+- int quantity
+- String color
+- List<String> images
+- int numRatings
+- Category category
+- Seller seller
+- LocalDateTime createdAt
+- String Sizes
+- List<Review> reviews
+- boolean in_stock
+}
+
+interface com.ajay.repository.PaymentOrderRepository {
+~ PaymentOrder findByPaymentLinkId(String)
+}
+
+class com.ajay.response.AuthResponse {
+- String jwt
+- boolean status
+- String message
+- USER_ROLE role
+}
+
+class com.ajay.ai.services.AiChatBotServiceImpl {
+~ String GEMINI_API_KEY
+- CartRepository cartRepository
+- OrderRepository orderRepository
+- ProductRepository productRepository
+- UserRepository userRepository
+- JSONArray createFunctionDeclarations()
+- FunctionResponse processFunctionCall(JSONObject,Long,Long)
++ FunctionResponse getFunctionResponse(String,Long,Long)
++ ApiResponse aiChatBot(String,Long,Long)
+}
+
+
+class com.ajay.service.impl.RevenueServiceImpl {
+- OrderRepository orderRepository
++ List<RevenueChart> getDailyRevenueForChart(int,Long)
++ List<RevenueChart> getMonthlyRevenueForChart(int,Long)
++ List<RevenueChart> getYearlyRevenueForChart(int,Long)
++ List<RevenueChart> getHourlyRevenueForChart(Long)
++ List<RevenueChart> getRevenueChartByType(String,Long)
+}
+
+
+class com.ajay.controller.TransactionController {
+- TransactionService transactionService
+- SellerService sellerService
++ ResponseEntity<Transaction> createTransaction(Order)
++ ResponseEntity<List<Transaction>> getTransactionBySeller(String)
++ ResponseEntity<List<Transaction>> getAllTransactions()
+}
+
+
+class com.ajay.model.Wishlist {
+- Long id
+- User user
+- Set<Product> products
+}
+
+class com.ajay.model.Review {
+- Long id
+- String reviewText
+- double rating
+- List<String> productImages
+- Product product
+- User user
+- LocalDateTime createdAt
+}
+
+interface com.ajay.repository.OrderItemRepository {
+}
+class com.ajay.response.PaymentLinkResponse {
+- String payment_link_url
+- String payment_link_id
+}
+
+class com.ajay.request.Prompt {
+- String prompt
+}
+
+class com.ajay.dto.OrderItemDto {
+- Long id
+- ProductDto product
+- String size
+- int quantity
+- Integer mrpPrice
+- Integer sellingPrice
+- Long userId
+}
+
+class com.ajay.request.ReviewRequest {
+- Long productId
+- String review
+}
+
+class com.ajay.ai.controllers.AiHomeController {
++ ResponseEntity<ApiResponse> AiHome()
+}
+
+class com.ajay.exception.ReviewNotFoundException {
+}
+class com.ajay.model.Order {
+- Long id
+- String orderId
+- User user
+- Long sellerId
+- List<OrderItem> orderItems
+- Address shippingAddress
+- PaymentDetails paymentDetails
+- double totalMrpPrice
+- Integer totalSellingPrice
+- Integer discount
+- OrderStatus orderStatus
+- int totalItem
+- PaymentStatus paymentStatus
+- LocalDateTime orderDate
+- LocalDateTime deliverDate
+}
+
+class com.ajay.model.Seller {
+- Long id
+- String sellerName
+- String mobile
+- String email
+- String password
+- BusinessDetails businessDetails
+- BankDetails bankDetails
+- Address pickupAddress
+- String GSTIN
+- USER_ROLE role
+- boolean isEmailVerified
+- AccountStatus accountStatus
+}
+
+interface com.ajay.repository.TransactionRepository {
+~ List<Transaction> findBySellerId(Long)
+}
+
+class com.ajay.model.Home {
+- List<HomeCategory> grid
+- List<HomeCategory> shopByCategories
+- List<HomeCategory> electricCategories
+- List<HomeCategory> dealCategories
+- List<Deal> deals
+}
+
+enum com.ajay.domain.HomeCategorySection {
++  ELECTRIC_CATEGORIES
++  GRID
++  SHOP_BY_CATEGORIES
++  DEALS
+}
+
+interface com.ajay.service.HomeService {
+~ Home creatHomePageData(List<HomeCategory>)
+}
+
+enum com.ajay.domain.PayoutsStatus {
++  PENDING
++  SUCCESS
+}
+
+interface com.ajay.repository.UserRepository {
++ User findByEmail(String)
+}
+
+class com.ajay.controller.CartItemController {
+- CartItemService cartItemService
+- UserService userService
+}
+
+class com.ajay.controller.UserController {
+- UserService userService
++ ResponseEntity<User> getUserProfileHandler(String)
+}
+
+
+interface com.ajay.repository.SellerReportRepository {
+~ SellerReport findBySellerId(Long)
+}
+
+class com.ajay.model.HomeCategory {
+- Long id
+- String name
+- String image
+- String categoryId
+- HomeCategorySection section
+}
+
+enum com.ajay.domain.USER_ROLE {
++  ROLE_CUSTOMER
++  ROLE_SELLER
++  ROLE_ADMIN
+}
+
+interface com.ajay.service.ProductService {
++ Product createProduct(CreateProductRequest,Seller)
++ void deleteProduct(Long)
++ Product updateProduct(Long,Product)
++ Product updateProductStock(Long)
++ Product findProductById(Long)
++ List<Product> searchProduct(String)
++ Page<Product> getAllProduct(String,String,String,String,Integer,Integer,Integer,String,String,Integer)
++ List<Product> recentlyAddedProduct()
+~ List<Product> getProductBySellerId(Long)
+}
+
+interface com.ajay.service.CartItemService {
++ CartItem updateCartItem(Long,Long,CartItem)
++ void removeCartItem(Long,Long)
++ CartItem findCartItemById(Long)
+}
+
+class com.ajay.exception.GlobleException {
++ ResponseEntity<ErrorDetails> UserExceptionHandler(UserException,WebRequest)
++ ResponseEntity<ErrorDetails> ProductExceptionHandler(ProductException,WebRequest)
++ ResponseEntity<ErrorDetails> CartItemExceptionHandler(CartItemException,WebRequest)
++ ResponseEntity<ErrorDetails> OrderExceptionHandler(OrderException,WebRequest)
++ ResponseEntity<ErrorDetails> handleSellerException(SellerException,WebRequest)
++ ResponseEntity<ErrorDetails> CouponNotValidExceptionHandler(CouponNotValidException,WebRequest)
++ ResponseEntity<ErrorDetails> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException)
++ ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException,HttpHeaders,HttpStatus,WebRequest)
++ ResponseEntity<String> handleRuntimeException(RuntimeException)
++ ResponseEntity<ErrorDetails> otherExceptionHandler(Exception,WebRequest)
+}
+
+interface com.ajay.service.ReviewService {
+~ Review createReview(CreateReviewRequest,User,Product)
+~ List<Review> getReviewsByProductId(Long)
+~ Review updateReview(Long,String,double,Long)
+~ void deleteReview(Long,Long)
+}
+
+enum com.ajay.domain.PaymentStatus {
++  PENDING
++  PROCESSING
++  COMPLETED
++  FAILED
+}
+
+interface com.ajay.repository.PasswordResetTokenRepository {
+~ PasswordResetToken findByToken(String)
+}
+
+interface com.ajay.repository.ReviewRepository {
+~ List<Review> findReviewsByUserId(Long)
+~ List<Review> findReviewsByProductId(Long)
+}
+
+interface com.ajay.repository.NotificationRepository {
+}
+class com.ajay.controller.AuthController {
+- AuthService authService
++ ResponseEntity<ApiResponse> sentLoginOtp(VerificationCode)
++ ResponseEntity<AuthResponse> createUserHandler(SignupRequest)
++ ResponseEntity<AuthResponse> signin(LoginRequest)
+}
+
+
+class com.ajay.exception.CouponNotValidException {
+}
+class com.ajay.controller.SellerController {
+- SellerService sellerService
+- SellerReportService sellerReportService
+- EmailService emailService
+- VerificationCodeRepository verificationCodeRepository
+- VerificationService verificationService
+- JwtProvider jwtProvider
+- CustomeUserServiceImplementation customeUserServiceImplementation
++ ResponseEntity<ApiResponse> sentLoginOtp(VerificationCode)
++ ResponseEntity<AuthResponse> verifyLoginOtp(VerificationCode)
+- Authentication authenticate(String)
++ ResponseEntity<Seller> verifySellerEmail(String)
++ ResponseEntity<Seller> createSeller(Seller)
++ ResponseEntity<Seller> getSellerById(Long)
++ ResponseEntity<Seller> getSellerByJwt(String)
++ ResponseEntity<SellerReport> getSellerReport(String)
++ ResponseEntity<List<Seller>> getAllSellers(AccountStatus)
++ ResponseEntity<Seller> updateSeller(String,Seller)
++ ResponseEntity<Void> deleteSeller(Long)
+}
+
+
+interface com.ajay.service.VerificationService {
+~ VerificationCode createVerificationCode(String,String)
+}
+
+class com.ajay.EcommerceMultiVendorApplication {
++ {static} void main(String[])
+}
+
+class com.ajay.model.CartItem {
+- Long id
+- Cart cart
+- Product product
+- String size
+- int quantity
+- Integer mrpPrice
+- Integer sellingPrice
+- Long userId
+}
+
+interface com.ajay.service.UserService {
++ User findUserProfileByJwt(String)
++ User findUserByEmail(String)
+}
+
+class com.ajay.mapper.ProductMapper {
++ {static} ProductDto toProductDto(Product)
++ Product mapToEntity(ProductDto)
+}
+
+class com.ajay.service.impl.TransactionServiceImpl {
+- TransactionRepository transactionRepository
+- SellerRepository sellerRepository
++ Transaction createTransaction(Order)
++ List<Transaction> getTransactionBySeller(Seller)
++ List<Transaction> getAllTransactions()
+}
+
+
+interface com.ajay.ai.services.ProductDetailsBotService {
+~ String productDetailsChatBot(String)
+}
+
+class com.ajay.controller.OrderController {
+- OrderService orderService
+- UserService userService
+- OrderItemService orderItemService
+- CartService cartService
+- PaymentService paymentService
+- PaymentOrderRepository paymentOrderRepository
+- SellerReportService sellerReportService
+- SellerService sellerService
++ ResponseEntity<PaymentLinkResponse> createOrderHandler(Address,PaymentMethod,String)
++ ResponseEntity<List<Order>> usersOrderHistoryHandler(String)
++ ResponseEntity<Order> getOrderById(Long,String)
++ ResponseEntity<OrderItem> getOrderItemById(Long,String)
++ ResponseEntity<Order> cancelOrder(Long,String)
+}
+
+
+class com.ajay.service.impl.ProductServiceImpl {
+- ProductRepository productRepository
+- CategoryRepository categoryRepository
++ Product createProduct(CreateProductRequest,Seller)
++ {static} int calculateDiscountPercentage(double,double)
++ void deleteProduct(Long)
++ Product updateProduct(Long,Product)
++ Product updateProductStock(Long)
++ Product findProductById(Long)
++ List<Product> searchProduct(String)
++ Page<Product> getAllProduct(String,String,String,String,Integer,Integer,Integer,String,String,Integer)
++ List<Product> recentlyAddedProduct()
++ List<Product> getProductBySellerId(Long)
+}
+
+
+class com.ajay.model.Notification {
+- Long id
+- User customer
+- String message
+- Date sentAt
+- boolean readStatus
+}
+
+class com.ajay.ai.controllers.AiProductController {
+- AiProductService productService
++ ApiResponse generate(String)
+}
+
+
+interface com.ajay.repository.CategoryRepository {
+~ Category findByCategoryId(String)
+~ List<Category> findByLevel(Integer)
+}
+
+class com.ajay.model.PaymentOrder {
+- Long id
+- Long amount
+- PaymentOrderStatus status
+- PaymentMethod paymentMethod
+- String paymentLinkId
+- User user
+- Set<Order> orders
+}
+
+class com.ajay.request.RatingRequest {
+- Long productId
+- double rating
+}
+
+class com.ajay.service.impl.WishlistServiceImpl {
+- WishlistRepository wishlistRepository
++ Wishlist createWishlist(User)
++ Wishlist getWishlistByUserId(User)
++ Wishlist addProductToWishlist(User,Product)
+}
+
+
+class com.ajay.service.impl.CartItemServiceImplementation {
+- CartItemRepository cartItemRepository
++ CartItem updateCartItem(Long,Long,CartItem)
++ void removeCartItem(Long,Long)
++ CartItem findCartItemById(Long)
+}
+
+
+interface com.ajay.service.OrderService {
++ Set<Order> createOrder(User,Address,Cart)
++ Order findOrderById(Long)
++ List<Order> usersOrderHistory(Long)
++ List<Order> getShopsOrders(Long)
++ Order updateOrderStatus(Long,OrderStatus)
++ void deleteOrder(Long)
+~ Order cancelOrder(Long,User)
+}
+
+interface com.ajay.repository.AddressRepository {
+}
+class com.ajay.model.Address {
+- Long id
+- String name
+- String locality
+- String address
+- String city
+- String state
+- String pinCode
+- String mobile
+}
+
+class com.ajay.dto.OrderDto {
+- Long id
+- String orderId
+- UserDto user
+- Long sellerId
+- List<OrderItemDto> orderItems
+- Address shippingAddress
+- PaymentDetails paymentDetails
+- double totalMrpPrice
+- Integer totalSellingPrice
+- Integer discount
+- OrderStatus orderStatus
+- int totalItem
+- PaymentStatus paymentStatus
+- LocalDateTime orderDate
+- LocalDateTime deliverDate
+}
+
+enum com.ajay.domain.PaymentOrderStatus {
++  PENDING
++  SUCCESS
++  FAILED
+}
+
+class com.ajay.dto.RevenueChart {
+- String date
+- double revenue
+}
+
+class com.ajay.service.impl.CustomeUserServiceImplementation {
+- UserRepository userRepository
+- SellerRepository sellerRepository
+- {static} String SELLER_PREFIX
++ UserDetails loadUserByUsername(String)
+- UserDetails buildUserDetails(String,String,USER_ROLE)
+}
+
+
+class com.ajay.service.impl.HomeCategoryServiceImpl {
+- HomeCategoryRepository homeCategoryRepository
++ HomeCategory createCategory(HomeCategory)
++ List<HomeCategory> createCategories(List<HomeCategory>)
++ List<HomeCategory> getAllCategories()
++ HomeCategory updateCategory(HomeCategory,Long)
+}
+
+
+class com.ajay.exception.ErrorDetails {
+- String error
+- String details
+- LocalDateTime timestamp
++ String getError()
++ void setError(String)
++ String getDetails()
++ void setDetails(String)
++ LocalDateTime getTimestamp()
++ void setTimestamp(LocalDateTime)
+}
+
+
+interface com.ajay.service.RevenueService {
+~ List<RevenueChart> getDailyRevenueForChart(int,Long)
+~ List<RevenueChart> getMonthlyRevenueForChart(int,Long)
+~ List<RevenueChart> getYearlyRevenueForChart(int,Long)
+~ List<RevenueChart> getHourlyRevenueForChart(Long)
+~ List<RevenueChart> getRevenueChartByType(String,Long)
+}
+
+interface com.ajay.service.SellerReportService {
+~ SellerReport getSellerReport(Seller)
+~ SellerReport updateSellerReport(SellerReport)
+}
+
+interface com.ajay.repository.OrderRepository {
+~ List<Order> findByUserId(Long)
+~ List<Order> findBySellerIdOrderByOrderDateDesc(Long)
+~ List<Order> findBySellerIdAndOrderDateBetween(Long,LocalDateTime,LocalDateTime)
+}
+
+
+
+com.ajay.service.ReviewService <|.. com.ajay.service.impl.ReviewServiceImpl
+org.springframework.data.jpa.repository.JpaRepository <|-- com.ajay.repository.CouponRepository
+com.ajay.service.PaymentService <|.. com.ajay.service.impl.PaymentServiceImpl
+com.ajay.exception.Exception <|-- com.ajay.exception.ProductException
+com.ajay.service.AuthService <|.. com.ajay.service.impl.AuthServiceImpl
+org.springframework.data.jpa.repository.JpaRepository <|-- com.ajay.repository.DealRepository
+com.ajay.exception.Exception <|-- com.ajay.exception.UserException
+com.ajay.exception.Exception <|-- com.ajay.exception.CartItemException
+com.ajay.service.CartService <|.. com.ajay.service.impl.CartServiceImplementation
+org.springframework.data.jpa.repository.JpaRepository <|-- com.ajay.repository.CartRepository
+com.ajay.service.CouponService <|.. com.ajay.service.impl.CouponServiceImpl
+org.springframework.web.filter.OncePerRequestFilter <|-- com.ajay.config.JwtTokenValidator
+com.ajay.exception.Exception <|-- com.ajay.exception.OrderException
+com.ajay.exception.Exception <|-- com.ajay.exception.CategoryNotFoundException
+org.springframework.data.jpa.repository.JpaRepository <|-- com.ajay.repository.PayoutsRepository
+org.springframework.data.jpa.repository.JpaRepository <|-- com.ajay.repository.CartItemRepository
+org.springframework.data.jpa.repository.JpaRepository <|-- com.ajay.repository.SellerRepository
+com.ajay.service.OrderItemService <|.. com.ajay.service.impl.OrderItemServiceImpl
+com.ajay.ai.services.AiProductService <|.. com.ajay.ai.services.AiProductServiceImpl
+org.springframework.data.jpa.repository.JpaRepository <|-- com.ajay.repository.VerificationCodeRepository
+com.ajay.exception.Exception <|-- com.ajay.exception.SellerException
+com.ajay.exception.Exception <|-- com.ajay.exception.WishlistNotFoundException
+com.ajay.service.SellerReportService <|.. com.ajay.service.impl.SellerReportServiceImpl
+com.ajay.service.HomeService <|.. com.ajay.service.impl.HomeServiceImpl
+com.ajay.service.SellerService <|.. com.ajay.service.impl.SellerServiceImpl
+com.ajay.exception.Exception <|-- com.ajay.exception.ShopNotFoundException
+org.springframework.data.jpa.repository.JpaRepository <|-- com.ajay.repository.HomeCategoryRepository
+org.springframework.data.jpa.repository.JpaRepository <|-- com.ajay.repository.ProductRepository
+org.springframework.data.jpa.repository.JpaSpecificationExecutor <|-- com.ajay.repository.ProductRepository
+com.ajay.service.UserService <|.. com.ajay.service.impl.UserServiceImplementation
+org.springframework.data.jpa.repository.JpaRepository <|-- com.ajay.repository.WishlistRepository
+com.ajay.service.DealService <|.. com.ajay.service.impl.DealServiceImpl
+com.ajay.ai.services.ProductDetailsBotService <|.. com.ajay.ai.services.ProductDetailsBotServiceImpl
+org.springframework.boot.CommandLineRunner <|.. com.ajay.utils.AdminInitializationComponent
+com.ajay.service.VerificationService <|.. com.ajay.service.impl.VerificationServiceImpl
+com.ajay.service.OrderService <|.. com.ajay.service.impl.OrderServiceImplementation
+org.springframework.data.jpa.repository.JpaRepository <|-- com.ajay.repository.PaymentOrderRepository
+com.ajay.ai.services.AiChatBotService <|.. com.ajay.ai.services.AiChatBotServiceImpl
+com.ajay.service.RevenueService <|.. com.ajay.service.impl.RevenueServiceImpl
+org.springframework.data.jpa.repository.JpaRepository <|-- com.ajay.repository.OrderItemRepository
+com.ajay.exception.Exception <|-- com.ajay.exception.ReviewNotFoundException
+org.springframework.data.jpa.repository.JpaRepository <|-- com.ajay.repository.TransactionRepository
+org.springframework.data.jpa.repository.JpaRepository <|-- com.ajay.repository.UserRepository
+org.springframework.data.jpa.repository.JpaRepository <|-- com.ajay.repository.SellerReportRepository
+org.springframework.data.jpa.repository.JpaRepository <|-- com.ajay.repository.PasswordResetTokenRepository
+org.springframework.data.jpa.repository.JpaRepository <|-- com.ajay.repository.ReviewRepository
+org.springframework.data.jpa.repository.JpaRepository <|-- com.ajay.repository.NotificationRepository
+com.ajay.exception.Exception <|-- com.ajay.exception.CouponNotValidException
+com.ajay.service.TransactionService <|.. com.ajay.service.impl.TransactionServiceImpl
+com.ajay.service.ProductService <|.. com.ajay.service.impl.ProductServiceImpl
+org.springframework.data.jpa.repository.JpaRepository <|-- com.ajay.repository.CategoryRepository
+com.ajay.service.WishlistService <|.. com.ajay.service.impl.WishlistServiceImpl
+com.ajay.service.CartItemService <|.. com.ajay.service.impl.CartItemServiceImplementation
+org.springframework.data.jpa.repository.JpaRepository <|-- com.ajay.repository.AddressRepository
+org.springframework.security.core.userdetails.UserDetailsService <|.. com.ajay.service.impl.CustomeUserServiceImplementation
+com.ajay.service.HomeCategoryService <|.. com.ajay.service.impl.HomeCategoryServiceImpl
+org.springframework.data.jpa.repository.JpaRepository <|-- com.ajay.repository.OrderRepository
+@enduml
