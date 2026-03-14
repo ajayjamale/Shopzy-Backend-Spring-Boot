@@ -18,7 +18,7 @@ public class AiProductController {
 
     @PostMapping("/chat/demo")
     public ResponseEntity<ApiResponse> generate(
-            @RequestParam(value = "message", defaultValue = "Tell me a joke") String message) throws Exception {
+            @RequestParam(defaultValue = "Tell me a joke") String message) throws Exception {
 
         ApiResponse apiResponse = new ApiResponse();
 
