@@ -43,6 +43,7 @@ public class AuthController {
 
         ApiResponse res = new ApiResponse();
         res.setMessage("otp sent");
+        res.setStatus(true);
         return new ResponseEntity<>(res, HttpStatus.CREATED);
     }
 

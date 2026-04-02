@@ -8,6 +8,6 @@ public class EcommerceMultiVendorApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(EcommerceMultiVendorApplication.class, args);
-		System.err.println("Server is running...");
+		System.err.println("Server is running...!");
 	}
 }
