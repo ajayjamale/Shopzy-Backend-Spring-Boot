@@ -10,13 +10,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.ajay.domain.OrderStatus;
+import com.ajay.domain.PaymentStatus;
 import com.ajay.model.Order;
 import com.ajay.model.User;
 
 public interface OrderRepository extends JpaRepository<Order,Long> {
 
-    List<Order>findByUserId(Long userId);
-    List<Order> findBySellerIdOrderByOrderDateDesc(Long sellerId);
+    List<Order> findByUserIdAndPaymentStatusOrderByOrderDateDesc(Long userId, PaymentStatus paymentStatus);
+    List<Order> findBySellerIdAndPaymentStatusOrderByOrderDateDesc(Long sellerId, PaymentStatus paymentStatus);
     List<Order> findBySellerIdAndOrderDateBetween(Long sellerId,LocalDateTime startDate, LocalDateTime endDate);
 
 }

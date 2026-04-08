@@ -15,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,13 +42,17 @@ public class OrderController {
 			@RequestBody Address spippingAddress,
 			@RequestParam PaymentMethod paymentMethod,
 			@RequestHeader("Authorization")String jwt)
-            throws UserException, RazorpayException{
+            throws UserException, RazorpayException, OrderException {
 		
 		User user=userService.findUserProfileByJwt(jwt);
 		Cart cart=cartService.findUserCart(user);
+        if (cart.getCartItems() == null || cart.getCartItems().isEmpty()) {
+            throw new OrderException("Cart is empty");
+        }
 		Set<Order> orders =orderService.createOrder(user, spippingAddress,cart);
 
 		PaymentOrder paymentOrder=paymentService.createOrder(user,orders);
+        paymentOrder.setPaymentMethod(paymentMethod);
 
 		PaymentLinkResponse res = new PaymentLinkResponse();
 
@@ -84,6 +90,9 @@ public class OrderController {
 		
 		User user = userService.findUserProfileByJwt(jwt);
 		Order orders=orderService.findOrderById(orderId);
+        if (!canAccessOrder(user, orders)) {
+            throw new OrderException("you can't access this order " + orderId);
+        }
 		return new ResponseEntity<>(orders,HttpStatus.ACCEPTED);
 	}
 
@@ -91,9 +100,11 @@ public class OrderController {
 	public ResponseEntity<OrderItem> getOrderItemById(
 			@PathVariable Long orderItemId, @RequestHeader("Authorization")
 	String jwt) throws Exception {
-		System.out.println("------- controller ");
 		User user = userService.findUserProfileByJwt(jwt);
 		OrderItem orderItem=orderItemService.getOrderItemById(orderItemId);
+        if (!user.getId().equals(orderItem.getUserId()) && !isRole("ROLE_ADMIN")) {
+            throw new OrderException("you can't access this order item " + orderItemId);
+        }
 		return new ResponseEntity<>(orderItem,HttpStatus.ACCEPTED);
 	}
 
@@ -114,5 +125,20 @@ public class OrderController {
 
 		return ResponseEntity.ok(order);
 	}
+
+    private boolean canAccessOrder(User user, Order order) {
+        if (user.getId().equals(order.getUser().getId())) {
+            return true;
+        }
+        return isRole("ROLE_ADMIN");
+    }
+
+    private boolean isRole(String role) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || auth.getAuthorities() == null) {
+            return false;
+        }
+        return auth.getAuthorities().stream().anyMatch(a -> role.equals(a.getAuthority()));
+    }
 
 }

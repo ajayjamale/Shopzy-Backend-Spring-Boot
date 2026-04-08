@@ -1,12 +1,12 @@
 package com.ajay.exception;
 
-import java.net.http.HttpHeaders;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -80,7 +80,7 @@ public class GlobleException {
 		return new ResponseEntity<>(err,HttpStatus.BAD_REQUEST);
 
 	}
-
+	
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<ErrorDetails> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException me){
@@ -89,25 +89,34 @@ public class GlobleException {
 	}
 	
 	@ExceptionHandler(NoHandlerFoundException.class)
-    public ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    public ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, WebRequest request) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("message", "Endpoint not found");
+        body.put("path", request.getDescription(false));
 
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
 
 
-	@ExceptionHandler(RuntimeException.class)
-	public ResponseEntity<String> handleRuntimeException(RuntimeException ex) {
-		return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+	@ExceptionHandler(SettlementException.class)
+	public ResponseEntity<ErrorDetails> settlementExceptionHandler(SettlementException ex, WebRequest req) {
+		ErrorDetails err = new ErrorDetails(ex.getMessage(), req.getDescription(false), LocalDateTime.now());
+		return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(MailException.class)
+	public ResponseEntity<ErrorDetails> mailExceptionHandler(MailException ex, WebRequest req){
+		String message = "Unable to send email. Check MAIL_USERNAME/MAIL_PASSWORD SMTP configuration and try again.";
+		ErrorDetails error = new ErrorDetails(message, req.getDescription(false), LocalDateTime.now());
+		return new ResponseEntity<>(error, HttpStatus.SERVICE_UNAVAILABLE);
 	}
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ErrorDetails> otherExceptionHandler(Exception e, WebRequest req){
 		ErrorDetails error=new ErrorDetails(e.getMessage(),req.getDescription(false),LocalDateTime.now());
 		
-		return new ResponseEntity<ErrorDetails>(error,HttpStatus.ACCEPTED);
+		return new ResponseEntity<ErrorDetails>(error,HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 }

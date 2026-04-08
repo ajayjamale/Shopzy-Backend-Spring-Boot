@@ -11,5 +11,9 @@ public interface UserService {
 	
 	public User findUserByEmail(String email) throws UserException;
 
+	List<User> getAllUsers();
+
+	List<User> getUsersByRole(com.ajay.domain.USER_ROLE role);
+
 
 }

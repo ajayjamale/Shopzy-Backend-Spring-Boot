@@ -50,7 +50,21 @@ public class HomeServiceImpl implements HomeService {
         if (dealRepository.findAll().isEmpty()) {
             List<Deal> deals = allCategories.stream()
                     .filter(category -> category.getSection() == HomeCategorySection.DEALS)
-                    .map(category -> new Deal(null, 10, category))  // Assuming a discount of 10 for each deal
+                    .map(category -> {
+                        Deal d = new Deal();
+                        d.setCategory(category);
+                        d.setTitle(category.getName());
+                        d.setSubtitle("Limited time offer");
+                        d.setDescription("Save big on " + category.getName());
+                        d.setDiscount(10);
+                        d.setDiscountLabel("10% OFF");
+                        d.setActive(true);
+                        d.setFeatured(true);
+                        d.setDisplayOrder(0);
+                        d.setStartDate(java.time.LocalDate.now());
+                        d.setEndDate(java.time.LocalDate.now().plusDays(30));
+                        return d;
+                    })  // Assuming a discount of 10 for each deal
                     .collect(Collectors.toList());
             createdDeals = dealRepository.saveAll(deals);
         } else createdDeals = dealRepository.findAll();

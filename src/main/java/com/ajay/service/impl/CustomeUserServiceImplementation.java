@@ -35,6 +35,9 @@ public class CustomeUserServiceImplementation implements UserDetailsService {
 			String actualUsername = username.substring(SELLER_PREFIX.length());
 			Seller seller = sellerRepository.findByEmail(actualUsername);
 			if (seller != null) {
+				if (seller.getAccountStatus() != com.ajay.domain.AccountStatus.ACTIVE) {
+					throw new UsernameNotFoundException("Seller inactive or blocked");
+				}
 				return buildUserDetails(seller.getEmail(), seller.getPassword(), seller.getRole());
 			}
 		} else {

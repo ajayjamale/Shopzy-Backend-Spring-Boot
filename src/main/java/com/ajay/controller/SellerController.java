@@ -3,6 +3,7 @@ package com.ajay.controller;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -42,11 +43,17 @@ public class SellerController {
     private final VerificationService verificationService;
     private final JwtProvider jwtProvider;
     private final CustomeUserServiceImplementation customeUserServiceImplementation;
+    @Value("${app.frontend.url:http://localhost:5173}")
+    private String frontendUrl;
 
 
     @PostMapping("/sent/login-top")
     public ResponseEntity<ApiResponse> sentLoginOtp(@RequestBody VerificationCode req) throws MessagingException, SellerException {
         Seller seller = sellerService.getSellerByEmail(req.getEmail());
+
+        if (seller.getAccountStatus() != AccountStatus.ACTIVE) {
+            throw new SellerException("Seller account is not active. Please contact support.");
+        }
 
         String otp = OtpUtils.generateOTP();
         VerificationCode verificationCode = verificationService.createVerificationCode(otp, req.getEmail());
@@ -67,6 +74,12 @@ public class SellerController {
 
         String otp = req.getOtp();
         String email = req.getEmail();
+
+        Seller seller = sellerService.getSellerByEmail(email);
+        if (seller.getAccountStatus() != AccountStatus.ACTIVE) {
+            throw new SellerException("Seller account is not active. Please contact support.");
+        }
+
         VerificationCode verificationCode = verificationCodeRepository.findByEmail(email);
 
         if (verificationCode == null || !verificationCode.getOtp().equals(otp)) {
@@ -130,8 +143,8 @@ public class SellerController {
 
         String subject = "Shopzy Verification Code";
         String text = "";
-        String frontend_url = "http://localhost:5173/verify-seller/";
-        emailService.sendVerificationOtpEmail(seller.getEmail(), verificationCode.getOtp(), subject, text + frontend_url);
+        String verifySellerUrl = frontendUrl + "/verify-seller/";
+        emailService.sendVerificationOtpEmail(seller.getEmail(), verificationCode.getOtp(), subject, text + verifySellerUrl);
         return new ResponseEntity<>(savedSeller, HttpStatus.CREATED);
     }
 

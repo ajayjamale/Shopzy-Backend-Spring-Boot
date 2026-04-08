@@ -30,6 +30,8 @@ public class PaymentOrder {
     private PaymentMethod paymentMethod;
 
     private String paymentLinkId;
+    private String razorpayOrderId;
+    private String razorpayPaymentId;
 
 
     @ManyToOne

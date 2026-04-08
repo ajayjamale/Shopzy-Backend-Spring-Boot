@@ -3,23 +3,18 @@ package com.ajay.controller;
 import com.ajay.domain.PaymentMethod;
 import com.ajay.exception.UserException;
 import com.ajay.model.*;
-import com.ajay.repository.CartItemRepository;
 import com.ajay.repository.CartRepository;
+import com.ajay.repository.PaymentOrderRepository;
+import com.ajay.request.SettlementRequest;
 import com.ajay.response.ApiResponse;
 import com.ajay.response.PaymentLinkResponse;
 import com.ajay.service.*;
-import com.razorpay.RazorpayException;
+import com.razorpay.PaymentLink;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,8 +25,9 @@ public class PaymentController {
     private final TransactionService transactionService;
     private final SellerReportService sellerReportService;
     private final SellerService sellerService;
+    private final SettlementService settlementService;
     private final CartRepository cartRepository;
-    private final CartItemRepository cartItemRepository;
+    private final PaymentOrderRepository paymentOrderRepository;
 
 
     @PostMapping("/api/payment/{paymentMethod}/order/{orderId}")
@@ -41,23 +37,27 @@ public class PaymentController {
             @RequestHeader("Authorization") String jwt) throws Exception {
 
         User user = userService.findUserProfileByJwt(jwt);
+        PaymentOrder order = paymentService.getPaymentOrderById(orderId);
 
-        PaymentLinkResponse paymentResponse;
+        if (!order.getUser().getId().equals(user.getId())) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
 
-        PaymentOrder order= paymentService.getPaymentOrderById(orderId);
+        if (!paymentMethod.equals(PaymentMethod.RAZORPAY)) {
+            throw new IllegalArgumentException("Unsupported payment method: " + paymentMethod);
+        }
 
-//        if(paymentMethod.equals(PaymentMethod.RAZORPAY)){
-//            paymentResponse=paymentService.createRazorpayPaymentLink(user,
-//                    order.getAmount(),
-//                    order.getId());
-//        }
-//        else{
-//            paymentResponse=paymentService.createStripePaymentLink(user,
-//                    order.getAmount(),
-//                    order.getId());
-//        }
+        PaymentLink payment = paymentService.createRazorpayPaymentLink(user, order.getAmount(), order.getId());
+        String paymentUrl = payment.get("short_url");
+        String paymentUrlId = payment.get("id");
 
-        return new ResponseEntity<>(null, HttpStatus.CREATED);
+        order.setPaymentMethod(paymentMethod);
+        order.setPaymentLinkId(paymentUrlId);
+        paymentOrderRepository.save(order);
+
+        PaymentLinkResponse response = new PaymentLinkResponse();
+        response.setPayment_link_url(paymentUrl);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
 
@@ -68,8 +68,6 @@ public class PaymentController {
             @RequestHeader("Authorization") String jwt) throws Exception {
 
         User user = userService.findUserProfileByJwt(jwt);
-
-        PaymentLinkResponse paymentResponse;
 
         PaymentOrder paymentOrder= paymentService
                 .getPaymentOrderByPaymentId(paymentLinkId);
@@ -88,13 +86,31 @@ public class PaymentController {
                 report.setTotalEarnings(report.getTotalEarnings()+order.getTotalSellingPrice());
                 report.setTotalSales(report.getTotalSales()+order.getOrderItems().size());
                 sellerReportService.updateSellerReport(report);
+
+                // Auto-create settlement entry per order ITEM (idempotent per orderItemId)
+                order.getOrderItems().forEach(oi -> {
+                    SettlementRequest settlementReq = new SettlementRequest();
+                    settlementReq.setSellerId(order.getSellerId());
+                    settlementReq.setOrderId(order.getId());
+                    settlementReq.setOrderItemId(oi.getId());
+                    settlementReq.setTransactionId(paymentId);
+                    settlementReq.setOrderReference(order.getOrderId());
+                    settlementReq.setGrossAmount(oi.getSellingPrice() != null ? (long) oi.getSellingPrice() : (long) oi.getMrpPrice());
+                    settlementReq.setPaymentMethod(paymentOrder.getPaymentMethod() != null ? paymentOrder.getPaymentMethod().name() : "ONLINE");
+                    settlementReq.setRemarks("Auto-created after successful payment (item " + oi.getId() + ")");
+                    try {
+                        settlementService.createSettlement(settlementReq);
+                    } catch (Exception ex) {
+                        // swallow duplicate/eligibility errors to avoid breaking payment success,
+                        // but they should be visible in logs for ops follow-up
+                        System.err.println("[Settlement] creation skipped for order item " + oi.getId() + ": " + ex.getMessage());
+                    }
+                });
             }
             Cart cart=cartRepository.findByUserId(user.getId());
             cart.setCouponPrice(0);
             cart.setCouponCode(null);
-//        Set<CartItem> items=cart.getCartItems();
-//        cartItemRepository.deleteAll(items);
-//        cart.setCartItems(new HashSet<>());
+            cart.getCartItems().clear();
             cartRepository.save(cart);
 
         }

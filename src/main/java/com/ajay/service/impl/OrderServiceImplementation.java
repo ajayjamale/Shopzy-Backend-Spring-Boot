@@ -33,6 +33,9 @@ public class OrderServiceImplementation implements OrderService {
 
 	@Override
 	public Set<Order> createOrder(User user, Address shippAddress, Cart cart) {
+		if (cart == null || cart.getCartItems() == null || cart.getCartItems().isEmpty()) {
+			throw new IllegalArgumentException("cannot create order from empty cart");
+		}
 		
 //		shippAddress.setUser(user);
 		if(!user.getAddresses().contains(shippAddress)){
@@ -53,15 +56,19 @@ public class OrderServiceImplementation implements OrderService {
 			Long sellerId=entry.getKey();
 			List<CartItem> cartItems=entry.getValue();
 
-			int totalOrderPrice = cartItems.stream()
+			int totalSellingPrice = cartItems.stream()
 					.mapToInt(CartItem::getSellingPrice).sum();
+			int totalMrpPrice = cartItems.stream()
+					.mapToInt(CartItem::getMrpPrice).sum();
 			int totalItem=cartItems.stream().mapToInt(CartItem::getQuantity).sum();
 
 			Order createdOrder=new Order();
+			createdOrder.setOrderId("ORD-" + UUID.randomUUID().toString().replace("-", "").substring(0, 12).toUpperCase());
 			createdOrder.setUser(user);
 			createdOrder.setSellerId(sellerId);
-			createdOrder.setTotalMrpPrice(totalOrderPrice);
-			createdOrder.setTotalSellingPrice(totalOrderPrice);
+			createdOrder.setTotalMrpPrice(totalMrpPrice);
+			createdOrder.setTotalSellingPrice(totalSellingPrice);
+			createdOrder.setDiscount(totalMrpPrice - totalSellingPrice);
 			createdOrder.setTotalItem(totalItem);
 			createdOrder.setShippingAddress(address);
 			createdOrder.setOrderStatus(OrderStatus.PENDING);
@@ -109,14 +116,12 @@ public class OrderServiceImplementation implements OrderService {
 
 	@Override
 	public List<Order> usersOrderHistory(Long userId) {
-
-		return orderRepository.findByUserId(userId);
+		return orderRepository.findByUserIdAndPaymentStatusOrderByOrderDateDesc(userId, PaymentStatus.COMPLETED);
 	}
 
 	@Override
 	public List<Order> getShopsOrders(Long sellerId) {
-
-		return orderRepository.findBySellerIdOrderByOrderDateDesc(sellerId);
+		return orderRepository.findBySellerIdAndPaymentStatusOrderByOrderDateDesc(sellerId, PaymentStatus.COMPLETED);
 	}
 
 	@Override

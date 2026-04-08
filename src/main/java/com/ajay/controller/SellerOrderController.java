@@ -49,7 +49,12 @@ public class SellerOrderController {
             @RequestHeader("Authorization") String jwt,
             @PathVariable Long orderId,
             @PathVariable OrderStatus orderStatus
-    ) throws OrderException {
+    ) throws OrderException, SellerException {
+        Seller seller = sellerService.getSellerProfile(jwt);
+        Order existingOrder = orderService.findOrderById(orderId);
+        if (!seller.getId().equals(existingOrder.getSellerId())) {
+            throw new OrderException("you can't update this order " + orderId);
+        }
 
         Order orders=orderService.updateOrderStatus(orderId,orderStatus);
 
@@ -59,10 +64,14 @@ public class SellerOrderController {
 
     @DeleteMapping("/{orderId}/delete")
     public ResponseEntity<ApiResponse> deleteOrderHandler(@PathVariable Long orderId,
-                                                          @RequestHeader("Authorization") String jwt) throws OrderException{
+                                                          @RequestHeader("Authorization") String jwt) throws OrderException, SellerException {
+        Seller seller = sellerService.getSellerProfile(jwt);
+        Order existingOrder = orderService.findOrderById(orderId);
+        if (!seller.getId().equals(existingOrder.getSellerId())) {
+            throw new OrderException("you can't delete this order " + orderId);
+        }
         orderService.deleteOrder(orderId);
         ApiResponse res=new ApiResponse("Order Deleted Successfully",true);
-        System.out.println("delete method working....");
         return new ResponseEntity<>(res,HttpStatus.ACCEPTED);
     }
 

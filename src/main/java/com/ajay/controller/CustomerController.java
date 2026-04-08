@@ -1,7 +1,6 @@
 package com.ajay.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ajay.model.Home;
 import com.ajay.model.HomeCategory;
+import com.ajay.response.HomePageResponse;
+import com.ajay.service.HomeContentService;
 import com.ajay.service.HomeCategoryService;
 import com.ajay.service.HomeService;
 
@@ -20,12 +21,11 @@ import java.util.List;
 public class CustomerController {
     private final HomeCategoryService homeCategoryService;
     private final HomeService homeService;
+    private final HomeContentService homeContentService;
 
     @GetMapping("/home-page")
-    public ResponseEntity<Home> getHomePageData() {
-//        Home homePageData = homeService.getHomePageData();
-//        return new ResponseEntity<>(homePageData, HttpStatus.ACCEPTED);
-        return null;
+    public ResponseEntity<HomePageResponse> getHomePageData() {
+        return ResponseEntity.ok(homeContentService.getPublicHomePage());
     }
 
     @PostMapping("/home/categories")
@@ -34,6 +34,6 @@ public class CustomerController {
     ) {
         List<HomeCategory> categories = homeCategoryService.createCategories(homeCategories);
         Home home=homeService.creatHomePageData(categories);
-        return new ResponseEntity<>(home, HttpStatus.ACCEPTED);
+        return ResponseEntity.ok(home);
     }
 }

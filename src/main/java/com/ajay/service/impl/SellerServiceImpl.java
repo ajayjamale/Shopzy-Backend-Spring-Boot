@@ -80,6 +80,9 @@ public class SellerServiceImpl implements SellerService {
 
     @Override
     public List<Seller> getAllSellers(AccountStatus status) {
+        if (status == null) {
+            return sellerRepository.findAll();
+        }
         return sellerRepository.findByAccountStatus(status);
     }
 
@@ -160,6 +163,10 @@ public class SellerServiceImpl implements SellerService {
     public Seller verifyEmail(String email, String otp) throws SellerException {
         Seller seller = this.getSellerByEmail(email);
         seller.setEmailVerified(true);
+        // Auto-activate on successful email verification
+        if (seller.getAccountStatus() == AccountStatus.PENDING_VERIFICATION) {
+            seller.setAccountStatus(AccountStatus.ACTIVE);
+        }
         return sellerRepository.save(seller);
     }
 

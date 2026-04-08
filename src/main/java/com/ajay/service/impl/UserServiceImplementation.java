@@ -73,6 +73,16 @@ public class UserServiceImplementation implements UserService {
 		throw new UserException("user not exist with username "+username);
 	}
 
+	@Override
+	public List<User> getAllUsers() {
+		return userRepository.findAll();
+	}
+
+	@Override
+	public List<User> getUsersByRole(com.ajay.domain.USER_ROLE role) {
+		return userRepository.findByRole(role);
+	}
+
 
 
 }

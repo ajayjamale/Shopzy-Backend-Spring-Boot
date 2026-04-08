@@ -45,7 +45,14 @@ public class SellerProductController {
     }
 
     @DeleteMapping("/{productId}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable Long productId) {
+    public ResponseEntity<Void> deleteProduct(
+            @PathVariable Long productId,
+            @RequestHeader("Authorization") String jwt) throws SellerException, ProductException {
+        Seller seller = sellerService.getSellerProfile(jwt);
+        Product existingProduct = productService.findProductById(productId);
+        if (existingProduct.getSeller() == null || !seller.getId().equals(existingProduct.getSeller().getId())) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         try {
             productService.deleteProduct(productId);
             return new ResponseEntity<>(HttpStatus.OK);
@@ -61,7 +68,13 @@ public class SellerProductController {
     @PatchMapping("/{productId}")
     public ResponseEntity<Product> updateProduct(
             @PathVariable Long productId,
-            @RequestBody Product product) {
+            @RequestBody Product product,
+            @RequestHeader("Authorization") String jwt) throws SellerException, ProductException {
+        Seller seller = sellerService.getSellerProfile(jwt);
+        Product existingProduct = productService.findProductById(productId);
+        if (existingProduct.getSeller() == null || !seller.getId().equals(existingProduct.getSeller().getId())) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         try {
             Product updatedProduct = productService.updateProduct(productId, product);
             return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
@@ -71,7 +84,14 @@ public class SellerProductController {
     }
 
     @PatchMapping("/{productId}/stock")
-    public ResponseEntity<Product> updateProductStock(@PathVariable Long productId) {
+    public ResponseEntity<Product> updateProductStock(
+            @PathVariable Long productId,
+            @RequestHeader("Authorization") String jwt) throws SellerException, ProductException {
+        Seller seller = sellerService.getSellerProfile(jwt);
+        Product existingProduct = productService.findProductById(productId);
+        if (existingProduct.getSeller() == null || !seller.getId().equals(existingProduct.getSeller().getId())) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         try {
             Product updatedProduct = productService.updateProductStock(productId);
             return new ResponseEntity<>(updatedProduct, HttpStatus.OK);

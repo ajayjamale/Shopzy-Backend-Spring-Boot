@@ -26,25 +26,28 @@ public class DealController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<Deal>> getDeals(
-
-	) {
-		List<Deal> deals = dealService.getDeals();
+    public ResponseEntity<List<Deal>> getDeals(@RequestParam(defaultValue = "false") boolean onlyActive) {
+        List<Deal> deals = dealService.getDeals(onlyActive);
 
 		return new ResponseEntity<>(deals, HttpStatus.ACCEPTED);
 	}
 
-	@PatchMapping("/{id}")
-	public ResponseEntity<Deal> updateDeal(@PathVariable Long id, @RequestBody Deal deal) throws Exception {
+    @PatchMapping("/{id}")
+    public ResponseEntity<Deal> updateDeal(@PathVariable Long id, @RequestBody Deal deal) throws Exception {
 
-		Deal updatedDeal = dealService.updateDeal(deal, id);
-		return ResponseEntity.ok(updatedDeal);
+        Deal updatedDeal = dealService.updateDeal(deal, id);
+        return ResponseEntity.ok(updatedDeal);
 
-	}
+    }
 
-	@DeleteMapping("/{id}")
-	public ResponseEntity<ApiResponse> deleteDeals(@PathVariable Long id) throws Exception {
-		dealService.deleteDeal(id);
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<Deal> toggleStatus(@PathVariable Long id, @RequestParam boolean active) throws Exception {
+        return ResponseEntity.ok(dealService.toggleActive(id, active));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse> deleteDeals(@PathVariable Long id) throws Exception {
+        dealService.deleteDeal(id);
 
 		ApiResponse apiResponse = new ApiResponse();
 		apiResponse.setMessage("Deal deleted");
