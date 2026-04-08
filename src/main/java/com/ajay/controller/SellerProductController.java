@@ -19,7 +19,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/sellers/product")
+@RequestMapping({"/api/sellers/products", "/sellers/product"})
 @RequiredArgsConstructor
 public class SellerProductController {
 
@@ -101,4 +101,3 @@ public class SellerProductController {
         }
     }
 }
-

@@ -31,7 +31,7 @@ import java.util.Collection;
 import java.util.List;
 
 @RestController
-@RequestMapping("/sellers")
+@RequestMapping({"/api/sellers", "/sellers"})
 @RequiredArgsConstructor
 public class SellerController {
 
@@ -46,7 +46,7 @@ public class SellerController {
     private String frontendUrl;
 
 
-    @PostMapping("/sent/login-top")
+    @PostMapping({"/auth/login-otp/send", "/sent/login-top"})
     public ResponseEntity<ApiResponse> sentLoginOtp(@RequestBody VerificationCode verificationCodeRequest) throws MessagingException, SellerException {
         Seller seller = sellerService.getSellerByEmail(verificationCodeRequest.getEmail());
 
@@ -66,7 +66,7 @@ public class SellerController {
         return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
     }
 
-    @PostMapping("/verify/login-top")
+    @PostMapping({"/auth/login-otp/verify", "/verify/login-top"})
     public ResponseEntity<AuthResponse> verifyLoginOtp(@RequestBody VerificationCode verificationCodeRequest) throws MessagingException, SellerException {
 //        Seller savedSeller = sellerService.createSeller(seller);
 
@@ -117,7 +117,7 @@ public class SellerController {
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
 
-    @PatchMapping("/verify/{otp}")
+    @PatchMapping({"/verification/{otp}", "/verify/{otp}"})
     public ResponseEntity<Seller> verifySellerEmail(@PathVariable String otp) throws SellerException {
 
 

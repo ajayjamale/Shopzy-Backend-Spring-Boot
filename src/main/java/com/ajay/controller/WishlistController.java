@@ -24,7 +24,7 @@ public class WishlistController {
     private final UserService userService;
 
 
-    @PostMapping("/create")
+    @PostMapping({"", "/create"})
     public ResponseEntity<Wishlist> createWishlist(@RequestBody User user) {
         Wishlist wishlist = wishlistService.createWishlist(user);
         return ResponseEntity.ok(wishlist);
@@ -39,7 +39,7 @@ public class WishlistController {
         return ResponseEntity.ok(wishlist);
     }
 
-    @PostMapping("/add-product/{productId}")
+    @PostMapping({"/items/{productId}", "/add-product/{productId}"})
     public ResponseEntity<Wishlist> addProductToWishlist(
             @PathVariable Long productId,
             @RequestHeader("Authorization") String jwt) throws WishlistNotFoundException, ProductException, UserException {

@@ -17,7 +17,7 @@ import com.ajay.service.SellerService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/seller/orders")
+@RequestMapping({"/api/sellers/orders", "/seller/orders"})
 @RequiredArgsConstructor
 public class SellerOrderController {
 
@@ -53,7 +53,7 @@ public class SellerOrderController {
     }
 
 
-    @DeleteMapping("/{orderId}/delete")
+    @DeleteMapping({"/{orderId}", "/{orderId}/delete"})
     public ResponseEntity<ApiResponse> deleteOrderHandler(@PathVariable Long orderId,
                                                           @RequestHeader("Authorization") String jwt) throws OrderException, SellerException {
         Seller seller = sellerService.getSellerProfile(jwt);

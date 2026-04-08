@@ -22,7 +22,7 @@ public class AdminController {
     private final HomeCategoryService homeCategoryService;
 
 
-    @PatchMapping("/seller/{id}/status/{status}")
+    @PatchMapping({"/sellers/{id}/status/{status}", "/seller/{id}/status/{status}"})
     public ResponseEntity<Seller> updateSellerStatus(
             @PathVariable Long id,
             @PathVariable AccountStatus status) throws SellerException {
@@ -32,7 +32,7 @@ public class AdminController {
 
     }
 
-    @GetMapping("/home-category")
+    @GetMapping({"/home-categories", "/home-category"})
     public ResponseEntity<List<HomeCategory>> getHomeCategory(
           ) throws Exception {
 
@@ -41,7 +41,7 @@ public class AdminController {
 
     }
 
-    @PatchMapping("/home-category/{id}")
+    @PatchMapping({"/home-categories/{id}", "/home-category/{id}"})
     public ResponseEntity<HomeCategory> updateHomeCategory(
             @PathVariable Long id,
             @RequestBody HomeCategory homeCategory) throws Exception {

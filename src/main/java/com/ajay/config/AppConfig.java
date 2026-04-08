@@ -35,19 +35,34 @@ public class AppConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
                                 "/auth/**",
+                                "/api/auth/**",
                                 "/home-page",
+                                "/api/home/**",
                                 "/products/**",
                                 "/ai/**"
                         ).permitAll()
-                        .requestMatchers(HttpMethod.POST, "/sellers").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/sellers/sent/login-top", "/sellers/verify/login-top").permitAll()
-                        .requestMatchers(HttpMethod.PATCH, "/sellers/verify/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/sellers", "/api/sellers").permitAll()
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/sellers/sent/login-top",
+                                "/sellers/verify/login-top",
+                                "/api/sellers/auth/login-otp/send",
+                                "/api/sellers/auth/login-otp/verify")
+                        .permitAll()
+                        .requestMatchers(HttpMethod.PATCH, "/sellers/verify/**", "/api/sellers/verification/**").permitAll()
                         .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers("/seller/**", "/sellers/product/**", "/api/seller/**")
+                        .requestMatchers(
+                                "/seller/**",
+                                "/sellers/product/**",
+                                "/api/seller/**",
+                                "/api/sellers/orders/**",
+                                "/api/sellers/products/**")
                         .hasAnyAuthority("ROLE_SELLER", "ROLE_ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/sellers/**").hasAnyAuthority("ROLE_SELLER", "ROLE_ADMIN")
-                        .requestMatchers(HttpMethod.PATCH, "/sellers").hasAnyAuthority("ROLE_SELLER", "ROLE_ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/sellers/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/sellers/**", "/api/sellers/**")
+                        .hasAnyAuthority("ROLE_SELLER", "ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/sellers", "/api/sellers")
+                        .hasAnyAuthority("ROLE_SELLER", "ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/sellers/**", "/api/sellers/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/transactions").hasAuthority("ROLE_ADMIN")
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll())

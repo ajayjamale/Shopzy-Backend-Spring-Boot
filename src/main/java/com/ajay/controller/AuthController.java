@@ -25,14 +25,14 @@ import jakarta.validation.Valid;
 
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping({"/api/auth", "/auth"})
 @RequiredArgsConstructor
 public class AuthController {
 
     private final AuthService authService;
 
 
-    @PostMapping("/sent/login-signup-otp")
+    @PostMapping({"/otp/login-signup/send", "/sent/login-signup-otp"})
     public ResponseEntity<ApiResponse> sentLoginOtp(
             @RequestBody VerificationCode verificationCodeRequest) throws MessagingException, UserException {
 

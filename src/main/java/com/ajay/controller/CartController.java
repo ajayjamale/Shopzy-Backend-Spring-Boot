@@ -44,7 +44,7 @@ public class CartController {
 		return new ResponseEntity<Cart>(cart,HttpStatus.OK);
 	}
 	
-	@PutMapping("/add")
+	@PutMapping({"/items", "/add"})
 	public ResponseEntity<CartItem> addItemToCart(@Valid @RequestBody AddItemRequest req,
 												  @RequestHeader("Authorization") String jwt) throws UserException, ProductException{
 		
@@ -61,7 +61,7 @@ public class CartController {
 		
 	}
 
-	@DeleteMapping("/item/{cartItemId}")
+	@DeleteMapping({"/items/{cartItemId}", "/item/{cartItemId}"})
 	public ResponseEntity<ApiResponse>deleteCartItemHandler(
 			@PathVariable Long cartItemId,
 			@RequestHeader("Authorization")String jwt)
@@ -75,7 +75,7 @@ public class CartController {
 		return new ResponseEntity<ApiResponse>(res,HttpStatus.ACCEPTED);
 	}
 
-	@PutMapping("/item/{cartItemId}")
+	@PutMapping({"/items/{cartItemId}", "/item/{cartItemId}"})
 	public ResponseEntity<CartItem>updateCartItemHandler(
 			@PathVariable Long cartItemId,
 			@RequestBody CartItem cartItem,

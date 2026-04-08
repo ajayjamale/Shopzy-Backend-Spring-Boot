@@ -14,7 +14,6 @@ import com.ajay.service.UserService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/coupons")
 @RequiredArgsConstructor
 public class AdminCouponController {
 
@@ -22,7 +21,7 @@ public class AdminCouponController {
     private final UserService userService;
     private final CartService cartService;
 
-    @PostMapping("/apply")
+    @PostMapping("/api/coupons/apply")
     public ResponseEntity<Cart> applyCoupon(
             @RequestParam String apply,
             @RequestParam String code,
@@ -47,19 +46,19 @@ public class AdminCouponController {
 
     // Admin operations
 
-    @PostMapping("/admin/create")
+    @PostMapping({"/api/admin/coupons", "/api/coupons/admin/create"})
     public ResponseEntity<Coupon> createCoupon(@RequestBody Coupon coupon) {
         Coupon createdCoupon = couponService.createCoupon(coupon);
         return ResponseEntity.ok(createdCoupon);
     }
 
-    @DeleteMapping("/admin/delete/{id}")
+    @DeleteMapping({"/api/admin/coupons/{id}", "/api/coupons/admin/delete/{id}"})
     public ResponseEntity<?> deleteCoupon(@PathVariable Long id) {
         couponService.deleteCoupon(id);
         return ResponseEntity.ok("Coupon deleted successfully");
     }
 
-    @GetMapping("/admin/all")
+    @GetMapping({"/api/admin/coupons", "/api/coupons/admin/all"})
     public ResponseEntity<List<Coupon>> getAllCoupons() {
         List<Coupon> coupons = couponService.getAllCoupons();
         return ResponseEntity.ok(coupons);

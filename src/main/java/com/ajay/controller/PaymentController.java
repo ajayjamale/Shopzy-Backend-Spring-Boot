@@ -46,7 +46,7 @@ public class PaymentController {
     private final CartRepository cartRepository;
     private final PaymentOrderRepository paymentOrderRepository;
 
-    @PostMapping("/api/payment/{paymentMethod}/order/{orderId}")
+    @PostMapping({"/api/payments/{paymentMethod}/orders/{orderId}", "/api/payment/{paymentMethod}/order/{orderId}"})
     public ResponseEntity<PaymentLinkResponse> paymentHandler(
             @PathVariable PaymentMethod paymentMethod,
             @PathVariable Long orderId,
@@ -95,7 +95,7 @@ public class PaymentController {
         throw new IllegalStateException("Unexpected type for Razorpay field '" + fieldName + "'");
     }
 
-    @PostMapping("/api/payment/verify")
+    @PostMapping({"/api/payments/verify", "/api/payment/verify"})
     public ResponseEntity<ApiResponse> verifyRazorpayPayment(
             @Valid @RequestBody RazorpayVerifyPaymentRequest request,
             @RequestHeader("Authorization") String jwt
@@ -144,7 +144,7 @@ public class PaymentController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    @PostMapping("/api/payment/fail")
+    @PostMapping({"/api/payments/fail", "/api/payment/fail"})
     public ResponseEntity<ApiResponse> markPaymentFailed(
             @Valid @RequestBody PaymentFailureRequest request,
             @RequestHeader("Authorization") String jwt
@@ -168,7 +168,7 @@ public class PaymentController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    @GetMapping("/api/payment/{paymentId}")
+    @GetMapping({"/api/payments/{paymentId}", "/api/payment/{paymentId}"})
     public ResponseEntity<ApiResponse> paymentSuccessHandler(
             @PathVariable String paymentId,
             @RequestParam String paymentLinkId,
@@ -241,4 +241,3 @@ public class PaymentController {
         cartRepository.save(cart);
     }
 }
-

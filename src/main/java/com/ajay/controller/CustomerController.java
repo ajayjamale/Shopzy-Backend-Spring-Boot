@@ -23,12 +23,12 @@ public class CustomerController {
     private final HomeService homeService;
     private final HomeContentService homeContentService;
 
-    @GetMapping("/home-page")
+    @GetMapping({"/api/home", "/home-page"})
     public ResponseEntity<HomePageResponse> getHomePageData() {
         return ResponseEntity.ok(homeContentService.getPublicHomePage());
     }
 
-    @PostMapping("/home/categories")
+    @PostMapping({"/api/home/categories", "/home/categories"})
     public ResponseEntity<Home> createHomeCategories(
             @RequestBody List<HomeCategory> homeCategories
     ) {
@@ -37,4 +37,3 @@ public class CustomerController {
         return ResponseEntity.ok(home);
     }
 }
-
