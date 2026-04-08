@@ -1,13 +1,12 @@
 package com.ajay.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ajay.config.JwtProvider;
-import com.ajay.domain.AccountStatus;
-import com.ajay.domain.USER_ROLE;
+import com.ajay.domains.AccountStatus;
+import com.ajay.domains.USER_ROLE;
 import com.ajay.exception.SellerException;
 import com.ajay.model.Address;
 import com.ajay.model.Seller;
@@ -177,3 +176,4 @@ public class SellerServiceImpl implements SellerService {
         return sellerRepository.save(seller);
     }
 }
+

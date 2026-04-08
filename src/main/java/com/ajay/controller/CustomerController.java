@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ajay.model.Home;
 import com.ajay.model.HomeCategory;
-import com.ajay.response.HomePageResponse;
+import com.ajay.payload.response.HomePageResponse;
 import com.ajay.service.HomeContentService;
 import com.ajay.service.HomeCategoryService;
 import com.ajay.service.HomeService;
@@ -37,3 +37,4 @@ public class CustomerController {
         return ResponseEntity.ok(home);
     }
 }
+

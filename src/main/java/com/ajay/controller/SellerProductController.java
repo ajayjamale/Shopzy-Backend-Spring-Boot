@@ -10,10 +10,11 @@ import com.ajay.exception.SellerException;
 import com.ajay.exception.UserException;
 import com.ajay.model.Product;
 import com.ajay.model.Seller;
-import com.ajay.request.CreateProductRequest;
+import com.ajay.payload.request.CreateProductRequest;
 import com.ajay.service.ProductService;
 import com.ajay.service.SellerService;
 import com.ajay.service.UserService;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class SellerProductController {
 
     @PostMapping
     public ResponseEntity<Product> createProduct(
-            @RequestBody CreateProductRequest request,
+            @Valid @RequestBody CreateProductRequest request,
             @RequestHeader("Authorization") String jwt)
             throws UserException, ProductException, CategoryNotFoundException, SellerException {
         Seller seller = sellerService.getSellerProfile(jwt);
@@ -63,7 +64,7 @@ public class SellerProductController {
 
     // The incoming Product object is treated as a plain data carrier.
     // ProductServiceImpl.updateProduct() loads the existing managed entity
-    // from DB and copies only the safe fields — so detached-entity issues
+    // from DB and copies only the safe fields â€” so detached-entity issues
     // and accidental nulling of seller/category are handled in the service.
     @PatchMapping("/{productId}")
     public ResponseEntity<Product> updateProduct(
@@ -100,3 +101,4 @@ public class SellerProductController {
         }
     }
 }
+

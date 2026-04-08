@@ -4,7 +4,7 @@ import org.springframework.data.domain.Page;
 import com.ajay.exception.ProductException;
 import com.ajay.model.Product;
 import com.ajay.model.Seller;
-import com.ajay.request.CreateProductRequest;
+import com.ajay.payload.request.CreateProductRequest;
 import java.util.List;
 
 public interface ProductService {

@@ -1,9 +1,7 @@
 package com.ajay.service;
 
 
-import com.ajay.exception.OrderException;
 import com.ajay.model.OrderItem;
-import com.ajay.model.Product;
 
 public interface OrderItemService {
 
@@ -12,3 +10,4 @@ public interface OrderItemService {
 
 
 }
+

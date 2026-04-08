@@ -9,24 +9,21 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
 
-import com.ajay.domain.USER_ROLE;
+import com.ajay.domains.USER_ROLE;
 import com.ajay.model.Seller;
 import com.ajay.model.User;
 import com.ajay.repository.SellerRepository;
 import com.ajay.repository.UserRepository;
 
 @Service
+@RequiredArgsConstructor
 public class CustomeUserServiceImplementation implements UserDetailsService {
 
 	private final UserRepository userRepository;
 	private final SellerRepository sellerRepository;
 	private static final String SELLER_PREFIX = "seller_";
-
-	public CustomeUserServiceImplementation(UserRepository userRepository, SellerRepository sellerRepository) {
-		this.userRepository = userRepository;
-		this.sellerRepository = sellerRepository;
-	}
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -35,7 +32,7 @@ public class CustomeUserServiceImplementation implements UserDetailsService {
 			String actualUsername = username.substring(SELLER_PREFIX.length());
 			Seller seller = sellerRepository.findByEmail(actualUsername);
 			if (seller != null) {
-				if (seller.getAccountStatus() != com.ajay.domain.AccountStatus.ACTIVE) {
+				if (seller.getAccountStatus() != com.ajay.domains.AccountStatus.ACTIVE) {
 					throw new UsernameNotFoundException("Seller inactive or blocked");
 				}
 				return buildUserDetails(seller.getEmail(), seller.getPassword(), seller.getRole());

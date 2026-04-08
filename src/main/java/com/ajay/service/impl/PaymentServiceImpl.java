@@ -1,8 +1,8 @@
 package com.ajay.service.impl;
 
-import com.ajay.domain.OrderStatus;
-import com.ajay.domain.PaymentOrderStatus;
-import com.ajay.domain.PaymentStatus;
+import com.ajay.domains.OrderStatus;
+import com.ajay.domains.PaymentOrderStatus;
+import com.ajay.domains.PaymentStatus;
 import com.ajay.model.Order;
 import com.ajay.model.PaymentOrder;
 import com.ajay.model.User;
@@ -211,3 +211,4 @@ public class PaymentServiceImpl implements PaymentService {
         return apiKey;
     }
 }
+

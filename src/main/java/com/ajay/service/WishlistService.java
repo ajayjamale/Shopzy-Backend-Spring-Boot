@@ -1,8 +1,6 @@
 package com.ajay.service;
 
 
-import java.util.Optional;
-
 import com.ajay.exception.WishlistNotFoundException;
 import com.ajay.model.Product;
 import com.ajay.model.User;
@@ -17,4 +15,5 @@ public interface WishlistService {
     Wishlist addProductToWishlist(User user, Product product) throws WishlistNotFoundException;
 
 }
+
 

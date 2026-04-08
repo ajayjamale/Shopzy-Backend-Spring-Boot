@@ -1,9 +1,8 @@
 package com.ajay.service;
 
 import java.util.List;
-import java.util.Optional;
 
-import com.ajay.domain.AccountStatus;
+import com.ajay.domains.AccountStatus;
 import com.ajay.exception.SellerException;
 import com.ajay.model.Seller;
 
@@ -19,3 +18,4 @@ public interface SellerService {
 
     Seller updateSellerAccountStatus(Long sellerId, AccountStatus status) throws SellerException;
 }
+

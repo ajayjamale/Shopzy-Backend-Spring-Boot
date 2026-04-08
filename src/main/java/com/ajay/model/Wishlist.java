@@ -26,3 +26,4 @@ public class Wishlist {
     @ManyToMany
     private Set<Product> products=new HashSet<>();
 }
+

@@ -1,7 +1,6 @@
 package com.ajay.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,12 +12,13 @@ import com.ajay.model.Cart;
 import com.ajay.model.CartItem;
 import com.ajay.model.Product;
 import com.ajay.model.User;
-import com.ajay.request.AddItemRequest;
-import com.ajay.response.ApiResponse;
+import com.ajay.payload.request.AddItemRequest;
+import com.ajay.payload.response.ApiResponse;
 import com.ajay.service.CartItemService;
 import com.ajay.service.CartService;
 import com.ajay.service.ProductService;
 import com.ajay.service.UserService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/cart")
@@ -45,7 +45,7 @@ public class CartController {
 	}
 	
 	@PutMapping("/add")
-	public ResponseEntity<CartItem> addItemToCart(@RequestBody AddItemRequest req,
+	public ResponseEntity<CartItem> addItemToCart(@Valid @RequestBody AddItemRequest req,
 												  @RequestHeader("Authorization") String jwt) throws UserException, ProductException{
 		
 		User user=userService.findUserProfileByJwt(jwt);
@@ -94,3 +94,4 @@ public class CartController {
 	
 
 }
+

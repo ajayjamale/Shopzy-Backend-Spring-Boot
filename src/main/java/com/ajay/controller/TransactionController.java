@@ -1,6 +1,6 @@
 package com.ajay.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,16 +15,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/transactions")
+@RequiredArgsConstructor
 public class TransactionController {
 
     private final TransactionService transactionService;
     private final SellerService sellerService;
-
-    @Autowired
-    public TransactionController(TransactionService transactionService, SellerService sellerService) {
-        this.transactionService = transactionService;
-        this.sellerService = sellerService;
-    }
 
     @PostMapping
     public ResponseEntity<Transaction> createTransaction(@RequestBody Order order) {
@@ -47,3 +42,4 @@ public class TransactionController {
         return ResponseEntity.ok(transactions);
     }
 }
+

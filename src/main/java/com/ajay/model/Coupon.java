@@ -9,8 +9,6 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.ajay.model.User;
-
 @Entity
 @Getter
 @Setter
@@ -38,3 +36,4 @@ public class Coupon {
     private Set<User> usedByUsers=new HashSet<>();
 
 }
+

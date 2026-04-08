@@ -1,7 +1,6 @@
 package com.ajay.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +10,6 @@ import com.ajay.exception.WishlistNotFoundException;
 import com.ajay.model.Product;
 import com.ajay.model.User;
 import com.ajay.model.Wishlist;
-import com.ajay.response.ApiResponse;
 import com.ajay.service.ProductService;
 import com.ajay.service.UserService;
 import com.ajay.service.WishlistService;
@@ -57,6 +55,7 @@ public class WishlistController {
     }
 
 }
+
 
 
 

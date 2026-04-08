@@ -3,7 +3,7 @@ package com.ajay.service;
 import java.util.List;
 import java.util.Map;
 
-import com.ajay.dto.RevenueChart;
+import com.ajay.payload.response.RevenueChart;
 
 public interface RevenueService {
     List<RevenueChart> getDailyRevenueForChart(int days, Long sellerId);
@@ -12,3 +12,4 @@ public interface RevenueService {
     List<RevenueChart> getHourlyRevenueForChart(Long sellerId);
     List<RevenueChart> getRevenueChartByType(String type,Long sellerId);
 }
+

@@ -6,7 +6,7 @@ import com.ajay.exception.ReviewNotFoundException;
 import com.ajay.model.Product;
 import com.ajay.model.Review;
 import com.ajay.model.User;
-import com.ajay.request.CreateReviewRequest;
+import com.ajay.payload.request.CreateReviewRequest;
 
 import java.util.List;
 
@@ -27,3 +27,4 @@ public interface ReviewService {
     void deleteReview(Long reviewId, Long userId) throws ReviewNotFoundException, AuthenticationException;
 
 }
+

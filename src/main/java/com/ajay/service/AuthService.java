@@ -2,11 +2,11 @@ package com.ajay.service;
 
 import com.ajay.exception.SellerException;
 import com.ajay.exception.UserException;
-import com.ajay.request.LoginRequest;
-import com.ajay.request.ResetPasswordRequest;
-import com.ajay.request.SignupRequest;
-import com.ajay.response.ApiResponse;
-import com.ajay.response.AuthResponse;
+import com.ajay.payload.request.LoginRequest;
+import com.ajay.payload.request.ResetPasswordRequest;
+import com.ajay.payload.request.SignupRequest;
+import com.ajay.payload.response.ApiResponse;
+import com.ajay.payload.response.AuthResponse;
 
 import jakarta.mail.MessagingException;
 

@@ -1,6 +1,6 @@
 package com.ajay.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.ajay.model.Order;
@@ -13,18 +13,11 @@ import com.ajay.service.TransactionService;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class TransactionServiceImpl implements TransactionService {
 
     private final TransactionRepository transactionRepository;
     private final SellerRepository sellerRepository;
-
-    @Autowired
-    public TransactionServiceImpl(TransactionRepository transactionRepository,
-                                  SellerRepository sellerRepository
-    ) {
-        this.transactionRepository = transactionRepository;
-        this.sellerRepository = sellerRepository;
-    }
 
     @Override
     public Transaction createTransaction(Order order) {
@@ -47,3 +40,4 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
 }
+

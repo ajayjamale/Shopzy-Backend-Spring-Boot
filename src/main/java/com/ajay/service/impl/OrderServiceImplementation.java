@@ -3,8 +3,8 @@ package com.ajay.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import com.ajay.domain.OrderStatus;
-import com.ajay.domain.PaymentStatus;
+import com.ajay.domains.OrderStatus;
+import com.ajay.domains.PaymentStatus;
 import com.ajay.exception.OrderException;
 import com.ajay.model.*;
 import com.ajay.repository.AddressRepository;
@@ -153,3 +153,4 @@ public class OrderServiceImplementation implements OrderService {
 	}
 
 }
+

@@ -3,7 +3,7 @@ package com.ajay.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import com.ajay.domain.HomeCategorySection;
+import com.ajay.domains.HomeCategorySection;
 import com.ajay.model.Deal;
 import com.ajay.model.Home;
 import com.ajay.model.HomeCategory;
@@ -82,3 +82,4 @@ public class HomeServiceImpl implements HomeService {
 
 
 }
+

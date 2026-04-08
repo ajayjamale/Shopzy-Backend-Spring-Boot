@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ajay.domain.PayoutsStatus;
+import com.ajay.domains.PayoutsStatus;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -35,3 +35,4 @@ public class Payouts {
 
     private LocalDateTime data=LocalDateTime.now();
 }
+

@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ajay.config.JwtProvider;
-import com.ajay.domain.USER_ROLE;
+import com.ajay.domains.USER_ROLE;
 import com.ajay.exception.SellerException;
 import com.ajay.exception.UserException;
 import com.ajay.model.Cart;
@@ -22,13 +22,13 @@ import com.ajay.model.VerificationCode;
 import com.ajay.repository.CartRepository;
 import com.ajay.repository.UserRepository;
 import com.ajay.repository.VerificationCodeRepository;
-import com.ajay.request.LoginRequest;
-import com.ajay.request.SignupRequest;
-import com.ajay.response.AuthResponse;
+import com.ajay.payload.request.LoginRequest;
+import com.ajay.payload.request.SignupRequest;
+import com.ajay.payload.response.AuthResponse;
 import com.ajay.service.AuthService;
 import com.ajay.service.EmailService;
 import com.ajay.service.UserService;
-import com.ajay.utils.OtpUtils;
+import com.ajay.util.OtpUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -164,3 +164,4 @@ public class AuthServiceImpl implements AuthService {
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
 }
+

@@ -2,7 +2,6 @@ package com.ajay.controller;
 
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,18 +14,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import com.ajay.config.JwtProvider;
-import com.ajay.domain.AccountStatus;
-import com.ajay.domain.USER_ROLE;
+import com.ajay.domains.AccountStatus;
+import com.ajay.domains.USER_ROLE;
 import com.ajay.exception.SellerException;
 import com.ajay.model.Seller;
 import com.ajay.model.SellerReport;
 import com.ajay.model.VerificationCode;
 import com.ajay.repository.VerificationCodeRepository;
-import com.ajay.response.ApiResponse;
-import com.ajay.response.AuthResponse;
+import com.ajay.payload.response.ApiResponse;
+import com.ajay.payload.response.AuthResponse;
 import com.ajay.service.*;
 import com.ajay.service.impl.CustomeUserServiceImplementation;
-import com.ajay.utils.OtpUtils;
+import com.ajay.util.OtpUtils;
 
 import java.util.Collection;
 import java.util.List;
@@ -48,32 +47,32 @@ public class SellerController {
 
 
     @PostMapping("/sent/login-top")
-    public ResponseEntity<ApiResponse> sentLoginOtp(@RequestBody VerificationCode req) throws MessagingException, SellerException {
-        Seller seller = sellerService.getSellerByEmail(req.getEmail());
+    public ResponseEntity<ApiResponse> sentLoginOtp(@RequestBody VerificationCode verificationCodeRequest) throws MessagingException, SellerException {
+        Seller seller = sellerService.getSellerByEmail(verificationCodeRequest.getEmail());
 
         if (seller.getAccountStatus() != AccountStatus.ACTIVE) {
             throw new SellerException("Seller account is not active. Please contact support.");
         }
 
         String otp = OtpUtils.generateOTP();
-        VerificationCode verificationCode = verificationService.createVerificationCode(otp, req.getEmail());
+        VerificationCode verificationCode = verificationService.createVerificationCode(otp, verificationCodeRequest.getEmail());
 
         String subject = otp + "Shopzy Seller Login OTP";
         String text = "YOUR OTP IS - ";
-        emailService.sendVerificationOtpEmail(req.getEmail(), verificationCode.getOtp(), subject, text);
+        emailService.sendVerificationOtpEmail(verificationCodeRequest.getEmail(), verificationCode.getOtp(), subject, text);
 
-        ApiResponse res = new ApiResponse();
-        res.setMessage("otp sent");
-        return new ResponseEntity<>(res, HttpStatus.CREATED);
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setMessage("otp sent");
+        return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
     }
 
     @PostMapping("/verify/login-top")
-    public ResponseEntity<AuthResponse> verifyLoginOtp(@RequestBody VerificationCode req) throws MessagingException, SellerException {
+    public ResponseEntity<AuthResponse> verifyLoginOtp(@RequestBody VerificationCode verificationCodeRequest) throws MessagingException, SellerException {
 //        Seller savedSeller = sellerService.createSeller(seller);
 
 
-        String otp = req.getOtp();
-        String email = req.getEmail();
+        String otp = verificationCodeRequest.getOtp();
+        String email = verificationCodeRequest.getEmail();
 
         Seller seller = sellerService.getSellerByEmail(email);
         if (seller.getAccountStatus() != AccountStatus.ACTIVE) {
@@ -86,7 +85,7 @@ public class SellerController {
             throw new SellerException("wrong otp...");
         }
 
-        Authentication authentication = authenticate(req.getEmail());
+        Authentication authentication = authenticate(verificationCodeRequest.getEmail());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String token = jwtProvider.generateToken(authentication);
@@ -196,3 +195,4 @@ public class SellerController {
 
     }
 }
+

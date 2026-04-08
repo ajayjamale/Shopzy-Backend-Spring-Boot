@@ -12,3 +12,4 @@ public interface DealRepository extends JpaRepository<Deal,Long> {
     List<Deal> findByActiveTrueAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByDisplayOrderAscIdAsc(LocalDate start, LocalDate end);
     List<Deal> findByActiveTrueOrderByDisplayOrderAscIdAsc();
 }
+

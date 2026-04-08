@@ -8,7 +8,7 @@ import com.ajay.model.Product;
 import com.ajay.model.Review;
 import com.ajay.model.User;
 import com.ajay.repository.ReviewRepository;
-import com.ajay.request.CreateReviewRequest;
+import com.ajay.payload.request.CreateReviewRequest;
 import com.ajay.service.ReviewService;
 
 import javax.naming.AuthenticationException;
@@ -73,3 +73,4 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
 }
+

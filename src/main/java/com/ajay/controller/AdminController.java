@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.ajay.domain.AccountStatus;
+import com.ajay.domains.AccountStatus;
 import com.ajay.exception.SellerException;
 import com.ajay.model.HomeCategory;
 import com.ajay.model.Seller;
@@ -51,3 +51,4 @@ public class AdminController {
 
     }
 }
+

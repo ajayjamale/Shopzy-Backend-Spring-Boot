@@ -1,13 +1,11 @@
 package com.ajay.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.ajay.exception.CartItemException;
 import com.ajay.exception.UserException;
-import com.ajay.model.Cart;
 import com.ajay.model.CartItem;
-import com.ajay.model.Product;
 import com.ajay.model.User;
 import com.ajay.repository.CartItemRepository;
 import com.ajay.service.CartItemService;
@@ -15,16 +13,10 @@ import com.ajay.service.CartItemService;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CartItemServiceImplementation implements CartItemService {
 	
-	private CartItemRepository cartItemRepository;
-
-
-	@Autowired
-	public CartItemServiceImplementation(CartItemRepository cartItemRepository) {
-		this.cartItemRepository=cartItemRepository;
-
-	}
+	private final CartItemRepository cartItemRepository;
 
 
 
@@ -75,12 +67,13 @@ public class CartItemServiceImplementation implements CartItemService {
 
 	@Override
 	public CartItem findCartItemById(Long cartItemId) throws CartItemException {
-		Optional<CartItem> opt=cartItemRepository.findById(cartItemId);
+		Optional<CartItem> optionalCartItem = cartItemRepository.findById(cartItemId);
 		
-		if(opt.isPresent()) {
-			return opt.get();
+		if(optionalCartItem.isPresent()) {
+			return optionalCartItem.get();
 		}
 		throw new CartItemException("cartItem not found with id : "+cartItemId);
 	}
 
 }
+

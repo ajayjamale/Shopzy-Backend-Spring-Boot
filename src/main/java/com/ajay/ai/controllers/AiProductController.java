@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.ajay.ai.services.AiProductService;
-import com.ajay.response.ApiResponse;
+import com.ajay.payload.response.ApiResponse;
 
 @RequiredArgsConstructor
 @RestController

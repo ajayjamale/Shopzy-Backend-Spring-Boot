@@ -5,7 +5,6 @@ import java.util.List;
 import com.ajay.model.Order;
 import com.ajay.model.Seller;
 import com.ajay.model.Transaction;
-import com.ajay.model.User;
 
 public interface TransactionService {
 
@@ -13,3 +12,4 @@ public interface TransactionService {
     List<Transaction> getTransactionBySeller(Seller seller);
     List<Transaction>getAllTransactions();
 }
+

@@ -13,3 +13,4 @@ public interface DealService {
 
     Deal toggleActive(Long id, boolean active) throws Exception;
 }
+

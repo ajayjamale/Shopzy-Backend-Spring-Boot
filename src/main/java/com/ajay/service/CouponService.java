@@ -1,7 +1,6 @@
 package com.ajay.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.ajay.model.Cart;
 import com.ajay.model.Coupon;
@@ -16,3 +15,4 @@ public interface CouponService {
     
     Coupon getCouponById(Long couponId);
 }
+

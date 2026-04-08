@@ -7,3 +7,4 @@ import com.ajay.model.SellerReport;
 public interface SellerReportRepository extends JpaRepository<SellerReport,Long> {
     SellerReport findBySellerId(Long sellerId);
 }
+

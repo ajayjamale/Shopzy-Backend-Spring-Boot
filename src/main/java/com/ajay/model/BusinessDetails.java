@@ -17,3 +17,4 @@ public class BusinessDetails {
     private String banner;
 
 }
+

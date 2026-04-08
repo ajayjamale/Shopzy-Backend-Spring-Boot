@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.ajay.model.Category;
 import com.ajay.model.Product;
 
 import java.util.List;
@@ -30,3 +29,4 @@ public interface ProductRepository extends JpaRepository<Product,Long> , JpaSpec
 
 
 }
+

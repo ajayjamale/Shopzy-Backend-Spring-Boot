@@ -3,7 +3,7 @@ package com.ajay.service;
 import java.util.List;
 import java.util.Set;
 
-import com.ajay.domain.OrderStatus;
+import com.ajay.domains.OrderStatus;
 import com.ajay.exception.OrderException;
 import com.ajay.model.*;
 
@@ -26,3 +26,4 @@ public interface OrderService {
 	Order cancelOrder(Long orderId,User user) throws OrderException;
 	
 }
+

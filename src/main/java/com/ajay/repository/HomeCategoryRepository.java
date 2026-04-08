@@ -6,3 +6,4 @@ import com.ajay.model.HomeCategory;
 
 public interface HomeCategoryRepository extends JpaRepository<HomeCategory,Long> {
 }
+

@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.ajay.exception.UserException;
 import com.ajay.model.Cart;
 import com.ajay.model.Coupon;
 import com.ajay.model.User;
@@ -66,3 +65,4 @@ public class AdminCouponController {
         return ResponseEntity.ok(coupons);
     }
 }
+

@@ -1,7 +1,6 @@
 package com.ajay.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +15,6 @@ import com.ajay.service.CouponService;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -110,3 +108,4 @@ public class CouponServiceImpl implements CouponService {
     return null;
     }
 }
+

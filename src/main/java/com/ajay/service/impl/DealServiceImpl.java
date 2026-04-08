@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.ajay.model.Deal;
-import com.ajay.model.Home;
 import com.ajay.model.HomeCategory;
 import com.ajay.repository.DealRepository;
 import com.ajay.repository.HomeCategoryRepository;
@@ -96,3 +95,4 @@ public class DealServiceImpl implements DealService {
 
 
 }
+

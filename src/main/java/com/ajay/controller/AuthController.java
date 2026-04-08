@@ -9,19 +9,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ajay.domain.USER_ROLE;
+import com.ajay.domains.USER_ROLE;
 import com.ajay.exception.SellerException;
 import com.ajay.exception.UserException;
 import com.ajay.model.*;
-import com.ajay.repository.VerificationCodeRepository;
-import com.ajay.request.LoginRequest;
-import com.ajay.request.ResetPasswordRequest;
-import com.ajay.request.SignupRequest;
-import com.ajay.response.ApiResponse;
-import com.ajay.response.AuthResponse;
+import com.ajay.payload.request.LoginRequest;
+import com.ajay.payload.request.SignupRequest;
+import com.ajay.payload.response.ApiResponse;
+import com.ajay.payload.response.AuthResponse;
 import com.ajay.service.AuthService;
 
 import jakarta.validation.Valid;
@@ -37,24 +34,24 @@ public class AuthController {
 
     @PostMapping("/sent/login-signup-otp")
     public ResponseEntity<ApiResponse> sentLoginOtp(
-            @RequestBody VerificationCode req) throws MessagingException, UserException {
+            @RequestBody VerificationCode verificationCodeRequest) throws MessagingException, UserException {
 
-        authService.sentLoginOtp(req.getEmail());
+        authService.sentLoginOtp(verificationCodeRequest.getEmail());
 
-        ApiResponse res = new ApiResponse();
-        res.setMessage("otp sent");
-        res.setStatus(true);
-        return new ResponseEntity<>(res, HttpStatus.CREATED);
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setMessage("otp sent");
+        apiResponse.setStatus(true);
+        return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
     }
 
     @PostMapping("/signup")
     public ResponseEntity<AuthResponse> createUserHandler(
             @Valid
-            @RequestBody SignupRequest req)
+            @RequestBody SignupRequest signupRequest)
             throws SellerException {
 
 
-        String token = authService.createUser(req);
+        String token = authService.createUser(signupRequest);
         AuthResponse authResponse = new AuthResponse();
         authResponse.setJwt(token);
         authResponse.setMessage("Register Success");
@@ -64,7 +61,7 @@ public class AuthController {
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<AuthResponse> signin(@RequestBody LoginRequest loginRequest) throws SellerException {
+    public ResponseEntity<AuthResponse> signin(@Valid @RequestBody LoginRequest loginRequest) throws SellerException {
 
         AuthResponse authResponse = authService.signin(loginRequest);
         return new ResponseEntity<>(authResponse, HttpStatus.OK);

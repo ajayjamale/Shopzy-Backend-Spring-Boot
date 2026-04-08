@@ -5,13 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-import com.ajay.domain.PaymentMethod;
-import com.ajay.domain.PaymentOrderStatus;
+import com.ajay.domains.PaymentMethod;
+import com.ajay.domains.PaymentOrderStatus;
 
 @Entity
 @AllArgsConstructor
@@ -23,8 +21,10 @@ public class PaymentOrder {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(nullable = false)
     private Long amount;
 
+    @Column(nullable = false)
     private PaymentOrderStatus status = PaymentOrderStatus.PENDING;
 
     private PaymentMethod paymentMethod;
@@ -40,3 +40,4 @@ public class PaymentOrder {
     @OneToMany
     private Set<Order> orders = new HashSet<>();
 }
+

@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,3 +30,4 @@ public class Transaction {
 
     private LocalDateTime date= LocalDateTime.now();
 }
+

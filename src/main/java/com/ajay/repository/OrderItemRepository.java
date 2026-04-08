@@ -7,3 +7,4 @@ import com.ajay.model.OrderItem;
 public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
 
 }
+

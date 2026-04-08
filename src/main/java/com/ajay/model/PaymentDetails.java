@@ -1,6 +1,6 @@
 package com.ajay.model;
 
-import com.ajay.domain.PaymentStatus;
+import com.ajay.domains.PaymentStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,9 +15,10 @@ public class PaymentDetails {
 	private String razorpayPaymentLinkId;
 	private String razorpayPaymentLinkReferenceId;
 	private String razorpayPaymentLinkStatus;
-	private String razorpayPaymentId​;
+	private String razorpayPaymentId;
 	private PaymentStatus status;
 
 
 
 }
+

@@ -1,6 +1,6 @@
 package com.ajay.model;
 
-import com.ajay.domain.USER_ROLE;
+import com.ajay.domains.USER_ROLE;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -8,7 +8,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -30,6 +29,7 @@ public class User {
 
     private String mobile;
 
+    @Column(nullable = false)
     private USER_ROLE role;
 
     @OneToMany
@@ -44,3 +44,4 @@ public class User {
     private Set<Coupon> usedCoupons=new HashSet<>();
 
 }
+

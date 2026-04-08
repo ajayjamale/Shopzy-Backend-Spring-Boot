@@ -8,9 +8,6 @@ import com.ajay.model.SellerReport;
 import com.ajay.repository.SellerReportRepository;
 import com.ajay.service.SellerReportService;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class SellerReportServiceImpl implements SellerReportService {
@@ -37,3 +34,4 @@ public class SellerReportServiceImpl implements SellerReportService {
     }
 
 }
+

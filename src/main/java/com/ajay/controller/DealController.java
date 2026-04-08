@@ -6,8 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.ajay.model.Deal;
-import com.ajay.model.HomeCategory;
-import com.ajay.response.ApiResponse;
+import com.ajay.payload.response.ApiResponse;
 import com.ajay.service.DealService;
 
 import java.util.List;
@@ -56,3 +55,4 @@ public class DealController {
 	}
 
 }
+

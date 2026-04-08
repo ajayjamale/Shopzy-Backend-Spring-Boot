@@ -3,141 +3,165 @@ package com.ajay.mapper;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.ajay.domain.OrderStatus;
-import com.ajay.dto.OrderDto;
-import com.ajay.dto.OrderHistory;
-import com.ajay.dto.OrderItemDto;
+import com.ajay.domains.OrderStatus;
+import com.ajay.payload.response.OrderHistory;
+import com.ajay.payload.response.OrderItemResponse;
+import com.ajay.payload.response.OrderResponse;
 import com.ajay.model.Order;
 import com.ajay.model.OrderItem;
 import com.ajay.model.User;
 
 public class OrderMapper {
 
-    // Maps OrderItem to OrderItemDto
-    public static OrderItemDto toOrderItemDto(OrderItem orderItem) {
+    private OrderMapper() {
+    }
+
+    public static OrderItemResponse toResponse(OrderItem orderItem) {
         if (orderItem == null) {
             return null;
         }
 
-        OrderItemDto orderItemDto = new OrderItemDto();
-        orderItemDto.setId(orderItem.getId());
-        orderItemDto.setProduct(ProductMapper.toProductDto(orderItem.getProduct()));
-        orderItemDto.setSize(orderItem.getSize());
-        orderItemDto.setQuantity(orderItem.getQuantity());
-        orderItemDto.setMrpPrice(orderItem.getMrpPrice());
-        orderItemDto.setSellingPrice(orderItem.getSellingPrice());
-//        orderItemDto.setUserId(orderItem.getUser().getId());
-
-        return orderItemDto;
+        OrderItemResponse response = new OrderItemResponse();
+        response.setId(orderItem.getId());
+        response.setProduct(ProductMapper.toResponse(orderItem.getProduct()));
+        response.setSize(orderItem.getSize());
+        response.setQuantity(orderItem.getQuantity());
+        response.setMrpPrice(orderItem.getMrpPrice());
+        response.setSellingPrice(orderItem.getSellingPrice());
+        return response;
     }
 
-    // Maps OrderItemDto to OrderItem
-    public static OrderItem toOrderItem(OrderItemDto orderItemDto) {
-        if (orderItemDto == null) {
+    public static OrderItem toEntity(OrderItemResponse response) {
+        if (response == null) {
             return null;
         }
 
         OrderItem orderItem = new OrderItem();
-        orderItem.setId(orderItemDto.getId());
-//        orderItem.setProduct(ProductMapper.toProductDto(orderItemDto.getProduct()));
-        orderItem.setSize(orderItemDto.getSize());
-        orderItem.setQuantity(orderItemDto.getQuantity());
-        orderItem.setMrpPrice(orderItemDto.getMrpPrice());
-        orderItem.setSellingPrice(orderItemDto.getSellingPrice());
-
-        // Assuming that the User is fetched separately and set here
+        orderItem.setId(response.getId());
+        orderItem.setSize(response.getSize());
+        orderItem.setQuantity(response.getQuantity());
+        orderItem.setMrpPrice(response.getMrpPrice());
+        orderItem.setSellingPrice(response.getSellingPrice());
         return orderItem;
     }
 
-    // Maps Order to OrderDto
-    public static OrderDto toOrderDto(Order order) {
+    public static OrderItem updateEntity(OrderItem orderItem, OrderItemResponse response) {
+        if (orderItem == null || response == null) {
+            return orderItem;
+        }
+        orderItem.setSize(response.getSize());
+        orderItem.setQuantity(response.getQuantity());
+        orderItem.setMrpPrice(response.getMrpPrice());
+        orderItem.setSellingPrice(response.getSellingPrice());
+        return orderItem;
+    }
+
+    public static OrderResponse toResponse(Order order) {
         if (order == null) {
             return null;
         }
 
-        OrderDto orderDto = new OrderDto();
-        orderDto.setId(order.getId());
-        orderDto.setOrderId(order.getOrderId());
-        orderDto.setUser(UserMapper.toUserDto(order.getUser()));
-        orderDto.setSellerId(order.getSellerId());
-        orderDto.setOrderItems(order.getOrderItems().stream().map(OrderMapper::toOrderItemDto).collect(Collectors.toList()));
-        orderDto.setShippingAddress(order.getShippingAddress());
-        orderDto.setPaymentDetails(order.getPaymentDetails());
-        orderDto.setTotalMrpPrice(order.getTotalMrpPrice());
-        orderDto.setTotalSellingPrice(order.getTotalSellingPrice());
-        orderDto.setDiscount(order.getDiscount());
-        orderDto.setOrderStatus(order.getOrderStatus());
-        orderDto.setTotalItem(order.getTotalItem());
-        orderDto.setPaymentStatus(order.getPaymentStatus());
-        orderDto.setOrderDate(order.getOrderDate());
-        orderDto.setDeliverDate(order.getDeliverDate());
+        OrderResponse response = new OrderResponse();
+        response.setId(order.getId());
+        response.setOrderId(order.getOrderId());
+        response.setUser(UserMapper.toResponse(order.getUser()));
+        response.setSellerId(order.getSellerId());
+        response.setOrderItems(order.getOrderItems().stream().map(OrderMapper::toResponse).collect(Collectors.toList()));
+        response.setShippingAddress(order.getShippingAddress());
+        response.setPaymentDetails(order.getPaymentDetails());
+        response.setTotalMrpPrice(order.getTotalMrpPrice());
+        response.setTotalSellingPrice(order.getTotalSellingPrice());
+        response.setDiscount(order.getDiscount());
+        response.setOrderStatus(order.getOrderStatus());
+        response.setTotalItem(order.getTotalItem());
+        response.setPaymentStatus(order.getPaymentStatus());
+        response.setOrderDate(order.getOrderDate());
+        response.setDeliverDate(order.getDeliverDate());
 
-        return orderDto;
+        return response;
     }
 
-    // Maps OrderDto to Order
-    public static Order toOrder(OrderDto orderDto) {
-        if (orderDto == null) {
+    public static Order toEntity(OrderResponse response) {
+        if (response == null) {
             return null;
         }
 
         Order order = new Order();
-        order.setId(orderDto.getId());
-        order.setOrderId(orderDto.getOrderId());
-//        order.setUser(UserMapper.toUser(orderDto.getUser()));
-        order.setSellerId(orderDto.getSellerId());
-//        order.setOrderItems(orderDto.getOrderItems().stream().map(OrderMapper::toOrderItem).collect(Collectors.toList()));
-        order.setShippingAddress(orderDto.getShippingAddress());
-        order.setPaymentDetails(orderDto.getPaymentDetails());
-        order.setTotalMrpPrice(orderDto.getTotalMrpPrice());
-        order.setTotalSellingPrice(orderDto.getTotalSellingPrice());
-        order.setDiscount(orderDto.getDiscount());
-        order.setOrderStatus(orderDto.getOrderStatus());
-        order.setTotalItem(orderDto.getTotalItem());
-        order.setPaymentStatus(orderDto.getPaymentStatus());
-        order.setOrderDate(orderDto.getOrderDate());
-        order.setDeliverDate(orderDto.getDeliverDate());
+        order.setId(response.getId());
+        order.setOrderId(response.getOrderId());
+        order.setSellerId(response.getSellerId());
+        order.setShippingAddress(response.getShippingAddress());
+        order.setPaymentDetails(response.getPaymentDetails());
+        order.setTotalMrpPrice(response.getTotalMrpPrice());
+        order.setTotalSellingPrice(response.getTotalSellingPrice());
+        order.setDiscount(response.getDiscount());
+        order.setOrderStatus(response.getOrderStatus());
+        order.setTotalItem(response.getTotalItem());
+        order.setPaymentStatus(response.getPaymentStatus());
+        order.setOrderDate(response.getOrderDate());
+        order.setDeliverDate(response.getDeliverDate());
 
         return order;
     }
 
-    // Maps OrderHistory to OrderHistoryDto
+    public static Order updateEntity(Order order, OrderResponse response) {
+        if (order == null || response == null) {
+            return order;
+        }
+        order.setShippingAddress(response.getShippingAddress());
+        order.setPaymentDetails(response.getPaymentDetails());
+        order.setTotalMrpPrice(response.getTotalMrpPrice());
+        order.setTotalSellingPrice(response.getTotalSellingPrice());
+        order.setDiscount(response.getDiscount());
+        order.setOrderStatus(response.getOrderStatus());
+        order.setTotalItem(response.getTotalItem());
+        order.setPaymentStatus(response.getPaymentStatus());
+        order.setOrderDate(response.getOrderDate());
+        order.setDeliverDate(response.getDeliverDate());
+        return order;
+    }
+
     public static OrderHistory toOrderHistory(List<Order> orders, User user) {
         if (orders == null || user == null) {
             return null;
         }
 
         OrderHistory orderHistory = new OrderHistory();
+        orderHistory.setUser(UserMapper.toResponse(user));
 
-        // Set user
-        orderHistory.setUser(UserMapper.toUserDto(user));
-
-        // Filter current orders (those that are not DELIVERED or CANCELLED)
-        List<OrderDto> currentOrders = orders.stream()
+        List<OrderResponse> currentOrders = orders.stream()
                 .filter(order -> order.getOrderStatus() != OrderStatus.DELIVERED && order.getOrderStatus() != OrderStatus.CANCELLED)
-                .map(OrderMapper::toOrderDto)
+                .map(OrderMapper::toResponse)
                 .collect(Collectors.toList());
-
         orderHistory.setCurrentOrders(currentOrders);
-
-        // Set total orders
         orderHistory.setTotalOrders(orders.size());
 
-        // Set cancelled orders
         int cancelledOrders = (int) orders.stream()
                 .filter(order -> order.getOrderStatus() == OrderStatus.CANCELLED)
                 .count();
         orderHistory.setCancelledOrders(cancelledOrders);
 
-        // Set completed orders (those that are DELIVERED)
         int completedOrders = (int) orders.stream()
                 .filter(order -> order.getOrderStatus() == OrderStatus.DELIVERED)
                 .count();
         orderHistory.setCompletedOrders(completedOrders);
 
-
         return orderHistory;
     }
 
+    public static OrderItemResponse toOrderItemResponse(OrderItem orderItem) {
+        return toResponse(orderItem);
+    }
 
+    public static OrderItem toOrderItem(OrderItemResponse response) {
+        return toEntity(response);
+    }
+
+    public static OrderResponse toOrderResponse(Order order) {
+        return toResponse(order);
+    }
+
+    public static Order toOrder(OrderResponse response) {
+        return toEntity(response);
+    }
 }

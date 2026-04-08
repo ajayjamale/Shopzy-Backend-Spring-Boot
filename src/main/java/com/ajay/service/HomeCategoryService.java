@@ -10,3 +10,4 @@ public interface HomeCategoryService {
     List<HomeCategory> getAllCategories();
     HomeCategory updateCategory(HomeCategory categories,Long id) throws Exception;
 }
+

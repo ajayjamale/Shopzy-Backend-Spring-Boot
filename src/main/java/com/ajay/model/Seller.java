@@ -1,7 +1,7 @@
 package com.ajay.model;
 
-import com.ajay.domain.AccountStatus;
-import com.ajay.domain.USER_ROLE;
+import com.ajay.domains.AccountStatus;
+import com.ajay.domains.USER_ROLE;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -18,12 +18,16 @@ public class Seller {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String sellerName;
 
     private String mobile;
 
     @Column(unique = true, nullable = false)
     private String email;
+
+    @Column(nullable = false)
     private String password;
 
     @Embedded
@@ -37,11 +41,14 @@ public class Seller {
 
     private String GSTIN;
 
+    @Column(nullable = false)
     private USER_ROLE role;
 
     private  boolean isEmailVerified=false;
 
+    @Column(nullable = false)
     private AccountStatus accountStatus = AccountStatus.PENDING_VERIFICATION;
 
 
 }
+

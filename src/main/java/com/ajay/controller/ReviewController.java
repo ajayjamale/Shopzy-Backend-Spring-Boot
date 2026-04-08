@@ -1,7 +1,6 @@
 package com.ajay.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,11 +10,12 @@ import com.ajay.exception.UserException;
 import com.ajay.model.Product;
 import com.ajay.model.Review;
 import com.ajay.model.User;
-import com.ajay.request.CreateReviewRequest;
-import com.ajay.response.ApiResponse;
+import com.ajay.payload.request.CreateReviewRequest;
+import com.ajay.payload.response.ApiResponse;
 import com.ajay.service.ProductService;
 import com.ajay.service.ReviewService;
 import com.ajay.service.UserService;
+import jakarta.validation.Valid;
 
 import javax.naming.AuthenticationException;
 import java.util.List;
@@ -40,7 +40,7 @@ public class ReviewController {
 
     @PostMapping("/products/{productId}/reviews")
     public ResponseEntity<Review> writeReview(
-            @RequestBody CreateReviewRequest req,
+            @Valid @RequestBody CreateReviewRequest req,
             @PathVariable Long productId,
             @RequestHeader("Authorization") String jwt) throws UserException, ProductException {
 
@@ -56,7 +56,7 @@ public class ReviewController {
 
     @PatchMapping("/reviews/{reviewId}")
     public ResponseEntity<Review> updateReview(
-            @RequestBody CreateReviewRequest req,
+            @Valid @RequestBody CreateReviewRequest req,
             @PathVariable Long reviewId,
             @RequestHeader("Authorization") String jwt)
             throws UserException,
@@ -91,3 +91,4 @@ public class ReviewController {
 
     }
 }
+

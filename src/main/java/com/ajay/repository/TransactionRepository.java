@@ -10,3 +10,4 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
 
     List<Transaction> findBySellerId(Long sellerId);
 }
+

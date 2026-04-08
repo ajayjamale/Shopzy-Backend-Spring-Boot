@@ -39,7 +39,7 @@ public class Product {
 
     private LocalDateTime createdAt;
 
-    // FIX: Renamed "Sizes" → "sizes" (was capital S)
+    // FIX: Renamed "Sizes" â†’ "sizes" (was capital S)
     // Jackson was serializing this as "Sizes" in API responses,
     // but the frontend always sends "sizes" (lowercase) on create/update.
     // This caused sizes to be silently ignored and saved as null every time.

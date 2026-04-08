@@ -1,7 +1,5 @@
 package com.ajay.model;
 
-import java.util.Objects;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
@@ -42,3 +40,4 @@ public class CartItem {
 
 	
 }
+

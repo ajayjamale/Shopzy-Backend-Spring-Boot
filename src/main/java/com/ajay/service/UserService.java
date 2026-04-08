@@ -13,7 +13,8 @@ public interface UserService {
 
 	List<User> getAllUsers();
 
-	List<User> getUsersByRole(com.ajay.domain.USER_ROLE role);
+	List<User> getUsersByRole(com.ajay.domains.USER_ROLE role);
 
 
 }
+

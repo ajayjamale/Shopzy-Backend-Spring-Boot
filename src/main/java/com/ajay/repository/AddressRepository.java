@@ -7,3 +7,4 @@ import com.ajay.model.Address;
 public interface AddressRepository extends JpaRepository<Address, Long> {
 
 }
+

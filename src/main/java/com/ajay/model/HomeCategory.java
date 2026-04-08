@@ -1,6 +1,6 @@
 package com.ajay.model;
 
-import com.ajay.domain.HomeCategorySection;
+import com.ajay.domains.HomeCategorySection;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,3 +26,4 @@ public class HomeCategory {
     private String categoryId;
     private HomeCategorySection section;
 }
+

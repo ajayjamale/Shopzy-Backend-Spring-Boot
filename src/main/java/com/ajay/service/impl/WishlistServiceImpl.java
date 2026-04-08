@@ -1,7 +1,6 @@
 package com.ajay.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ajay.exception.WishlistNotFoundException;
@@ -10,8 +9,6 @@ import com.ajay.model.User;
 import com.ajay.model.Wishlist;
 import com.ajay.repository.WishlistRepository;
 import com.ajay.service.WishlistService;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -49,4 +46,5 @@ public class WishlistServiceImpl implements WishlistService {
 
 
 }
+
 

@@ -10,7 +10,6 @@ import com.ajay.model.Product;
 import com.ajay.model.User;
 import com.ajay.repository.CartItemRepository;
 import com.ajay.repository.CartRepository;
-import com.ajay.service.CartItemService;
 import com.ajay.service.CartService;
 import com.ajay.service.ProductService;
 
@@ -87,3 +86,4 @@ public class CartServiceImplementation implements CartService {
 	}
 
 }
+

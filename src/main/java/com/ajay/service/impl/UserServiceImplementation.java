@@ -1,48 +1,30 @@
 package com.ajay.service.impl;
 
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
 
 import com.ajay.config.JwtProvider;
 import com.ajay.exception.UserException;
-import com.ajay.model.PasswordResetToken;
 import com.ajay.model.User;
 import com.ajay.repository.PasswordResetTokenRepository;
 import com.ajay.repository.UserRepository;
 import com.ajay.service.UserService;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImplementation implements UserService {
 
 
-	private UserRepository userRepository;
-	private JwtProvider jwtProvider;
-	private PasswordEncoder passwordEncoder;
-	private PasswordResetTokenRepository passwordResetTokenRepository;
-	private JavaMailSender javaMailSender;
-	
-	public UserServiceImplementation(
-			UserRepository userRepository,
-			JwtProvider jwtProvider,
-			PasswordEncoder passwordEncoder,
-			PasswordResetTokenRepository passwordResetTokenRepository,
-			JavaMailSender javaMailSender) {
-		
-		this.userRepository=userRepository;
-		this.jwtProvider=jwtProvider;
-		this.passwordEncoder=passwordEncoder;
-		this.passwordResetTokenRepository=passwordResetTokenRepository;
-		this.javaMailSender=javaMailSender;
-		
-	}
+	private final UserRepository userRepository;
+	private final JwtProvider jwtProvider;
+	private final PasswordEncoder passwordEncoder;
+	private final PasswordResetTokenRepository passwordResetTokenRepository;
+	private final JavaMailSender javaMailSender;
 
 	@Override
 	public User findUserProfileByJwt(String jwt) throws UserException {
@@ -79,7 +61,7 @@ public class UserServiceImplementation implements UserService {
 	}
 
 	@Override
-	public List<User> getUsersByRole(com.ajay.domain.USER_ROLE role) {
+	public List<User> getUsersByRole(com.ajay.domains.USER_ROLE role) {
 		return userRepository.findByRole(role);
 	}
 

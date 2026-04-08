@@ -3,7 +3,7 @@ package com.ajay.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import com.ajay.dto.RevenueChart;
+import com.ajay.payload.response.RevenueChart;
 import com.ajay.model.Order;
 import com.ajay.repository.OrderRepository;
 import com.ajay.service.RevenueService;
@@ -11,9 +11,7 @@ import com.ajay.service.RevenueService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -140,3 +138,4 @@ public class RevenueServiceImpl implements RevenueService {
     }
 
 }
+

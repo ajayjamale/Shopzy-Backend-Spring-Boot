@@ -1,16 +1,16 @@
 package com.ajay.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.ajay.domain.OrderStatus;
+import com.ajay.domains.OrderStatus;
 import com.ajay.exception.OrderException;
 import com.ajay.exception.SellerException;
 import com.ajay.model.Order;
 import com.ajay.model.Seller;
-import com.ajay.response.ApiResponse;
+import com.ajay.payload.response.ApiResponse;
 import com.ajay.service.OrderService;
 import com.ajay.service.SellerService;
 
@@ -18,21 +18,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/seller/orders")
+@RequiredArgsConstructor
 public class SellerOrderController {
 
     private final OrderService orderService;
 
     private final SellerService sellerService;
-
-    @Autowired
-    public SellerOrderController(OrderService orderService,
-
-                                 SellerService sellerService) {
-        this.orderService=orderService;
-
-
-        this.sellerService = sellerService;
-    }
 
     @GetMapping()
     public ResponseEntity<List<Order>> getAllOrdersHandler(
@@ -56,9 +47,9 @@ public class SellerOrderController {
             throw new OrderException("you can't update this order " + orderId);
         }
 
-        Order orders=orderService.updateOrderStatus(orderId,orderStatus);
+        Order updatedOrder = orderService.updateOrderStatus(orderId,orderStatus);
 
-        return new ResponseEntity<>(orders,HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(updatedOrder,HttpStatus.ACCEPTED);
     }
 
 
@@ -71,8 +62,9 @@ public class SellerOrderController {
             throw new OrderException("you can't delete this order " + orderId);
         }
         orderService.deleteOrder(orderId);
-        ApiResponse res=new ApiResponse("Order Deleted Successfully",true);
-        return new ResponseEntity<>(res,HttpStatus.ACCEPTED);
+        ApiResponse apiResponse = new ApiResponse("Order Deleted Successfully",true);
+        return new ResponseEntity<>(apiResponse,HttpStatus.ACCEPTED);
     }
 
 }
+
